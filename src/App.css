@@ -1,0 +1,13 @@
+.App {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+
+.button {
+  margin-left: 5px;
+}
