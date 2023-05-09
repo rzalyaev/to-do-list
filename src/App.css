@@ -1,12 +1,35 @@
+
 .App {
   padding: 30px;
-  display: inline-block;
+  display: flex;
 }
 
 .App > div {
   margin-right: 50px;
 }
 
-.button {
-  margin-left: 5px;
+.error {
+  border: red 1px solid;
 }
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background-color: aquamarine;
+}
+
+.is-done {
+  opacity: 0.5;
+}
+
+.error {
+  border: red 1px solid;
+}
+
+.error-message {
+  color: red;
+}
+
+
