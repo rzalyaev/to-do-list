@@ -1,4 +1,5 @@
 import React, {useState, ChangeEvent, KeyboardEvent} from 'react';
+import styles from './Todolist.module.css';
 import {TaskType, FilterType} from '../../App';
 import {Button} from "../common/Button";
 
@@ -11,7 +12,9 @@ type PropsType = {
 }
 
 export const Todolist: React.FC<PropsType> = (props) => {
+    const [title, setTitle] = useState('')
     const [filter, setFilter] = useState<FilterType>('all')
+    const [error, setError] = useState<string>('')
 
     const filterContainer = () => {
         let currentTasks = props.tasks;
@@ -41,16 +44,17 @@ export const Todolist: React.FC<PropsType> = (props) => {
         filterTasks('completed');
     }
 
-    let [title, setTitle] = useState('');
-
     const onChangeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setError('');
         setTitle(e.currentTarget.value);
     }
 
     const onClickAddTaskHandler = () => {
         if (title.trim() !== '') {
-            props.addTask(title);
+            props.addTask(title.trim());
             setTitle('');
+        } else {
+            setError('Ошибка! Введите текст!')
         }
     }
 
@@ -60,19 +64,27 @@ export const Todolist: React.FC<PropsType> = (props) => {
         }
     }
 
+    const onChangeHandler = (taskId: string, e: ChangeEvent<HTMLInputElement>) => {
+        let newIsDoneValue = e.currentTarget.checked;
+        props.changeTaskStatus(taskId, newIsDoneValue);
+    }
+
     const tasksElements = filterContainer().map((task) => {
         const onClickRemoveTaskHandler = () => {
             props.removeTask(task.id);
         }
 
-        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            let newIsDoneValue = e.currentTarget.checked;
-            props.changeTaskStatus(task.id, newIsDoneValue);
-        }
+        // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        //     let newIsDoneValue = e.currentTarget.checked;
+        //     props.changeTaskStatus(task.id, newIsDoneValue);
+        // }
 
         return (
-            <li key={task.id}>
-                <input type="checkbox" checked={task.isDone} onChange={onChangeHandler}/>
+            <li key={task.id} className={task.isDone ? styles.isDone : ''}>
+                <input type="checkbox"
+                       checked={task.isDone}
+                       onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeHandler(task.id, e)}
+                />
                 <span>{task.title}</span>
                 <Button name={'X'} callBack={onClickRemoveTaskHandler}/>
             </li>
@@ -83,18 +95,20 @@ export const Todolist: React.FC<PropsType> = (props) => {
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input value={title}
+                <input className={error && styles.errorInput}
+                       value={title}
                        onChange={onChangeAddTaskHandler}
                        onKeyDown={onKeyDownAddTaskHandler}/>
                 <Button name={'+'} callBack={onClickAddTaskHandler}/>
             </div>
+            {error && <div className={styles.errorMessage}>{error}</div>}
             <ul>
                 {tasksElements}
             </ul>
             <div>
-                <Button name={'All'} callBack={filterAllHandler}/>
-                <Button name={'Active'} callBack={filterActiveHandler}/>
-                <Button name={'Completed'} callBack={filterCompletedHandler}/>
+                <Button className={filter === 'all' ? styles.activeFilter : ''} name={'All'} callBack={filterAllHandler}/>
+                <Button className={filter === 'active' ? styles.activeFilter : ''} name={'Active'} callBack={filterActiveHandler}/>
+                <Button className={filter === 'completed' ? styles.activeFilter : ''} name={'Completed'} callBack={filterCompletedHandler}/>
             </div>
         </div>
     )
