@@ -78,17 +78,29 @@ export const Todolist: React.FC<PropsType> = (props) => {
                 <input className={error && styles.errorInput}
                        value={title}
                        onChange={onChangeAddTaskHandler}
-                       onKeyDown={onKeyDownAddTaskHandler}/>
-                <Button name={'+'} callBack={onClickAddTaskHandler}/>
+                       onKeyDown={onKeyDownAddTaskHandler}
+                />
+                <Button name={'+'}
+                        callBack={onClickAddTaskHandler}
+                />
             </div>
             {error && <div className={styles.errorMessage}>{error}</div>}
             <ul>
                 {tasksElements}
             </ul>
             <div>
-                <Button className={filter === 'all' ? styles.activeFilter : ''} name={'All'} callBack={filterAllHandler}/>
-                <Button className={filter === 'active' ? styles.activeFilter : ''} name={'Active'} callBack={filterActiveHandler}/>
-                <Button className={filter === 'completed' ? styles.activeFilter : ''} name={'Completed'} callBack={filterCompletedHandler}/>
+                <Button className={props.filter === 'all' ? styles.activeFilter : ''}
+                        name={'All'}
+                        callBack={filterAllHandler}
+                />
+                <Button className={props.filter === 'active' ? styles.activeFilter : ''}
+                        name={'Active'}
+                        callBack={filterActiveHandler}
+                />
+                <Button className={props.filter === 'completed' ? styles.activeFilter : ''}
+                        name={'Completed'}
+                        callBack={filterCompletedHandler}
+                />
             </div>
         </div>
     )
