@@ -19,16 +19,8 @@ export const Todolist: React.FC<PropsType> = (props) => {
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string>('')
 
-    const filterContainer = () => {
-        let currentTasks = props.tasks;
-
-        if (filter === 'active') {
-            currentTasks = props.tasks.filter(el => !el.isDone);
-        }
-        if (filter === 'completed') {
-            currentTasks = props.tasks.filter(el => el.isDone);
-        }
-        return currentTasks;
+    const handleOnClickRemoveTodolist = () => {
+        props.removeTodolist(props.id);
     }
 
     const filterTasks = (filterMethod: FilterType) => {
