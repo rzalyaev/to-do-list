@@ -23,21 +23,11 @@ export const Todolist: React.FC<PropsType> = (props) => {
         props.removeTodolist(props.id);
     }
 
-    const filterTasks = (filterMethod: FilterType) => {
-        setFilter(filterMethod);
-    }
+    const filterTasks = (filterMethod: FilterType) => props.changeFilter(props.id, filterMethod);
 
-    const filterAllHandler = () => {
-        filterTasks('all');
-    }
-
-    const filterActiveHandler = () => {
-        filterTasks('active');
-    }
-
-    const filterCompletedHandler = () => {
-        filterTasks('completed');
-    }
+    const filterAllHandler = () => filterTasks('all');
+    const filterActiveHandler = () => filterTasks('active');
+    const filterCompletedHandler = () => filterTasks('completed');
 
     const onChangeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setError('');
