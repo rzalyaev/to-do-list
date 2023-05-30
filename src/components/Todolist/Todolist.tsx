@@ -4,11 +4,15 @@ import {TaskType, FilterType} from '../../App';
 import {Button} from "../common/Button";
 
 type PropsType = {
+     id: string
     title: string
+    filter: FilterType
     tasks: TaskType[]
-    addTask: (title: string) => void
-    removeTask: (taskId: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    removeTodolist: (todolistId: string) => void
+    changeFilter: (todolistId: string, filterMethod: FilterType) => void
+    addTask: (todolistId: string, title: string) => void
+    removeTask: (todolistId: string, taskId: string) => void
+    changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
 }
 
 export const Todolist: React.FC<PropsType> = (props) => {
