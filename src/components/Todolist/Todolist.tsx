@@ -54,7 +54,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
         props.changeTaskStatus(props.id, taskId, newIsDoneValue);
     }
 
-    const tasksElements = filterContainer().map((task) => {
+    const tasksElements = props.tasks.map((task) => {
         const onClickRemoveTaskHandler = () => {
             props.removeTask(props.id, task.id);
         }
