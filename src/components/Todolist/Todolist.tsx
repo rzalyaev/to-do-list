@@ -69,11 +69,11 @@ export const Todolist: React.FC<PropsType> = (props) => {
                 <Button name={'X'} callBack={onClickRemoveTaskHandler}/>
             </li>
         )
-    })
+    });
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{props.title}<button onClick={handleOnClickRemoveTodolist}>X</button></h3>
             <div>
                 <input className={error && styles.errorInput}
                        value={title}
