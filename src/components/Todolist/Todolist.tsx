@@ -36,7 +36,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
     const onClickAddTaskHandler = () => {
         if (title.trim() !== '') {
-            props.addTask(title.trim());
+            props.addTask(props.id, title.trim());
             setTitle('');
         } else {
             setError('Ошибка! Введите текст!')
@@ -51,12 +51,12 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
     const onChangeHandler = (taskId: string, e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
-        props.changeTaskStatus(taskId, newIsDoneValue);
+        props.changeTaskStatus(props.id, taskId, newIsDoneValue);
     }
 
     const tasksElements = filterContainer().map((task) => {
         const onClickRemoveTaskHandler = () => {
-            props.removeTask(task.id);
+            props.removeTask(props.id, task.id);
         }
 
         // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
