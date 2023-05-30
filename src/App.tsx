@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { v1 } from 'uuid';
+import {v1} from 'uuid';
 import './App.css';
 import {Todolist} from './components/Todolist/Todolist';
 
@@ -10,6 +10,16 @@ export type TaskType = {
 }
 
 export type FilterType = 'all' | 'active' | 'completed'
+
+export type TodolistsType = {
+    id: string
+    title: string
+    filter: FilterType
+}
+
+export type TasksStateType = {
+    [key: string]: TaskType[]
+}
 
 function App() {
     let todolistID1 = v1();
