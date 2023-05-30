@@ -63,10 +63,35 @@ function App() {
 
     return (
         <div className="App">
-            <Todolist title="What to learn"
-                      tasks={tasks}
-                      addTask={addTask}
-                      removeTask={removeTask} changeTaskStatus={changeTaskStatus}/>
+            {
+                todolists.map(todolist => {
+                    const filterContainer = () => {
+                        let currentTasks = tasks[todolist.id];
+
+                        if (todolist.filter === 'active') {
+                            currentTasks = tasks[todolist.id].filter(task => !task.isDone);
+                        }
+                        if (todolist.filter === 'completed') {
+                            currentTasks = tasks[todolist.id].filter(task => task.isDone);
+                        }
+                        return currentTasks;
+                    }
+
+                    return (
+                        <Todolist key={todolist.id}
+                                  id={todolist.id}
+                                  title={todolist.title}
+                                  filter={todolist.filter}
+                                  tasks={filterContainer()}
+                                  removeTodolist={removeTodolist}
+                                  changeFilter={changeFilter}
+                                  addTask={addTask}
+                                  removeTask={removeTask}
+                                  changeTaskStatus={changeTaskStatus}
+                        />
+                    )
+                })
+            }
         </div>
     );
 }
