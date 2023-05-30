@@ -17,7 +17,6 @@ type PropsType = {
 
 export const Todolist: React.FC<PropsType> = (props) => {
     const [title, setTitle] = useState('')
-    const [filter, setFilter] = useState<FilterType>('all')
     const [error, setError] = useState<string>('')
 
     const filterContainer = () => {
