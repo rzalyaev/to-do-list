@@ -59,11 +59,6 @@ export const Todolist: React.FC<PropsType> = (props) => {
             props.removeTask(props.id, task.id);
         }
 
-        // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        //     let newIsDoneValue = e.currentTarget.checked;
-        //     props.changeTaskStatus(task.id, newIsDoneValue);
-        // }
-
         return (
             <li key={task.id} className={task.isDone ? styles.isDone : ''}>
                 <input type="checkbox"
