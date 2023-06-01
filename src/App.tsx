@@ -43,6 +43,13 @@ function App() {
         ]
     });
 
+    const addTodolist = (newTodoTitle: string) => {
+        const newTodoId = v1();
+        const newTodolist: TodolistsType = {id: newTodoId, title: newTodoTitle, filter: 'all'};
+        setTodolists([...todolists, newTodolist]);
+        setTasks({...tasks, [newTodoId]: []});
+    }
+
     const removeTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(todolist => todolist.id !== todolistId));
         delete tasks[todolistId];
