@@ -22,12 +22,11 @@ type PropsType = {
 const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle,
                       changeTodolistFilter, addTask, removeTask, changeTaskTitle, changeTaskStatus}: PropsType) => {
 
-    const handleOnClickRemoveTodolist = () => {
-        props.removeTodolist(props.id);
-    }
 
-    const filterTasks = (filterMethod: FilterType) => props.changeFilter(props.id, filterMethod);
+    const handleOnClickRemoveTodolist = () => removeTodolist(id);
+    const handleChangeTodolistTitle = (newTodoTitle: string) => changeTodolistTitle(id, newTodoTitle);
 
+    const filterTasks = (filterMethod: FilterType) => changeTodolistFilter(id, filterMethod);
     const filterAllHandler = () => filterTasks('all');
     const filterActiveHandler = () => filterTasks('active');
     const filterCompletedHandler = () => filterTasks('completed');
