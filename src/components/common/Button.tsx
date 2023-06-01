@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type PropsType = {
     className?: string
@@ -6,10 +6,12 @@ type PropsType = {
     callBack: () => void
 }
 
-export const Button: React.FC<PropsType> = (props) => {
+const Button: React.FC<PropsType> = (props) => {
     const onClickHandler = () => props.callBack();
 
     return (
         <button className={props.className} onClick={onClickHandler}>{props.name}</button>
-    )
-}
+    );
+};
+
+export default Button;
