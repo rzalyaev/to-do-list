@@ -4,15 +4,19 @@ import {TaskType, FilterType} from '../../App';
 import {Button} from "../common/Button";
 
 type PropsType = {
-     id: string
+    id: string
     title: string
     filter: FilterType
     tasks: TaskType[]
+
     removeTodolist: (todolistId: string) => void
-    changeFilter: (todolistId: string, filterMethod: FilterType) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
+    changeTodolistFilter: (todolistId: string, filter: FilterType) => void
+
     addTask: (todolistId: string, title: string) => void
     removeTask: (todolistId: string, taskId: string) => void
-    changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
 }
 
 const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle,
