@@ -15,9 +15,8 @@ type PropsType = {
     changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
 }
 
-export const Todolist: React.FC<PropsType> = (props) => {
-    const [title, setTitle] = useState('')
-    const [error, setError] = useState<string>('')
+const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle,
+                      changeTodolistFilter, addTask, removeTask, changeTaskTitle, changeTaskStatus}: PropsType) => {
 
     const handleOnClickRemoveTodolist = () => {
         props.removeTodolist(props.id);
@@ -51,13 +50,12 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
     const onChangeHandler = (taskId: string, e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
-        props.changeTaskStatus(props.id, taskId, newIsDoneValue);
+        changeTaskStatus(id, taskId, newIsDoneValue);
     }
 
-    const tasksElements = props.tasks.map((task) => {
-        const onClickRemoveTaskHandler = () => {
-            props.removeTask(props.id, task.id);
-        }
+    const tasksElements = tasks.map((task) => {
+        const onClickRemoveTaskHandler = () => removeTask(id, task.id);
+        const handleChangeTaskTitle = (newTaskTitle: string) => changeTaskTitle(id, task.id, newTaskTitle);
 
         return (
             <li key={task.id} className={task.isDone ? styles.isDone : ''}>
@@ -89,15 +87,15 @@ export const Todolist: React.FC<PropsType> = (props) => {
                 {tasksElements}
             </ul>
             <div>
-                <Button className={props.filter === 'all' ? styles.activeFilter : ''}
+                <Button className={filter === 'all' ? styles.activeFilter : ''}
                         name={'All'}
                         callBack={filterAllHandler}
                 />
-                <Button className={props.filter === 'active' ? styles.activeFilter : ''}
+                <Button className={filter === 'active' ? styles.activeFilter : ''}
                         name={'Active'}
                         callBack={filterActiveHandler}
                 />
-                <Button className={props.filter === 'completed' ? styles.activeFilter : ''}
+                <Button className={filter === 'completed' ? styles.activeFilter : ''}
                         name={'Completed'}
                         callBack={filterCompletedHandler}
                 />
