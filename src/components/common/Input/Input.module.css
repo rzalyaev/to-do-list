@@ -1,0 +1,14 @@
+.universalInput {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+}
+
+.errorMessage {
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #f31a51;
+}
