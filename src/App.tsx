@@ -109,10 +109,14 @@ function App() {
                                   title={todolist.title}
                                   filter={todolist.filter}
                                   tasks={filterContainer()}
+
                                   removeTodolist={removeTodolist}
-                                  changeFilter={changeFilter}
+                                  changeTodolistTitle={changeTodolistTitle}
+                                  changeTodolistFilter={changeTodolistFilter}
+
                                   addTask={addTask}
                                   removeTask={removeTask}
+                                  changeTaskTitle={changeTaskTitle}
                                   changeTaskStatus={changeTaskStatus}
                         />
                     )
