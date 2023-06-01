@@ -74,18 +74,13 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
 
     return (
         <div>
-            <h3>{props.title}<button onClick={handleOnClickRemoveTodolist}>X</button></h3>
-            <div>
-                <input className={error && styles.errorInput}
-                       value={title}
-                       onChange={onChangeAddTaskHandler}
-                       onKeyDown={onKeyDownAddTaskHandler}
+            <h3>
+                <EditableSpan value={title}
+                              changeBody={handleChangeTodolistTitle}
                 />
-                <Button name={'+'}
-                        callBack={onClickAddTaskHandler}
-                />
-            </div>
-            {error && <div className={styles.errorMessage}>{error}</div>}
+                <Button name={'X'} callBack={handleOnClickRemoveTodolist}/>
+            </h3>
+            <AddItemForm addItem={onClickAddTaskHandler}/>
             <ul>
                 {tasksElements}
             </ul>
