@@ -22,15 +22,15 @@ export type TasksStateType = {
 }
 
 function App() {
-    let todolistID1 = v1();
-    let todolistID2 = v1();
+    const todolistID1 = v1();
+    const todolistID2 = v1();
 
-    let [todolists, setTodolists] = useState<Array<TodolistsType>>([
+    const [todolists, setTodolists] = useState<Array<TodolistsType>>([
         {id: todolistID1, title: 'What to learn', filter: 'all'},
         {id: todolistID2, title: 'What to buy', filter: 'all'},
     ]);
 
-    let [tasks, setTasks] = useState<TasksStateType>({
+    const [tasks, setTasks] = useState<TasksStateType>({
         [todolistID1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
