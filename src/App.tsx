@@ -56,11 +56,12 @@ function App() {
         setTasks({...tasks});
     }
 
-    const changeFilter = (todolistId: string, filterMethod: FilterType) => {
-        setTodolists(todolists.map(todolist => todolist.id === todolistId ? {
-            ...todolist,
-            filter: filterMethod
-        } : todolist));
+    const changeTodolistTitle = (todolistId: string, title: string) => {
+        setTodolists(todolists.map(todo => todo.id === todolistId ? {...todo, title} : todo));
+    }
+
+    const changeTodolistFilter = (todolistId: string, filter: FilterType) => {
+        setTodolists(todolists.map(todo => todo.id === todolistId ? {...todo, filter} : todo));
     }
 
     const addTask = (todolistId: string, title: string) => {
