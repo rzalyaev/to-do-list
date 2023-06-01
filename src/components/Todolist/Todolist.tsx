@@ -66,8 +66,12 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
                        checked={task.isDone}
                        onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeHandler(task.id, e)}
                 />
-                <span>{task.title}</span>
-                <Button name={'X'} callBack={onClickRemoveTaskHandler}/>
+                <EditableSpan value={task.title}
+                              changeBody={handleChangeTaskTitle}
+                />
+                <Button name={'X'}
+                        callBack={onClickRemoveTaskHandler}
+                />
             </li>
         )
     });
