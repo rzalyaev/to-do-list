@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {v1} from 'uuid';
 import './App.css';
-import {Todolist} from './components/Todolist/Todolist';
+import Todolist from './components/Todolist/Todolist';
+import AddItemForm from './components/common/AddItemForm/AddItemForm';
 
 export type TaskType = {
     id: string
@@ -89,6 +90,7 @@ function App() {
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodolist}/>
             {
                 todolists.map(todolist => {
                     const filterContainer = () => {
