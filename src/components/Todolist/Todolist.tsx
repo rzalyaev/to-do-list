@@ -89,5 +89,7 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
                 />
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default Todolist;
