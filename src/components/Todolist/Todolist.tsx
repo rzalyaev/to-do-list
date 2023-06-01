@@ -1,4 +1,4 @@
-import React, {useState, ChangeEvent, KeyboardEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import styles from './Todolist.module.css';
 import {TaskType, FilterType} from '../../App';
 import Button from '../common/Button';
@@ -33,24 +33,8 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
     const filterActiveHandler = () => filterTasks('active');
     const filterCompletedHandler = () => filterTasks('completed');
 
-    const onChangeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError('');
-        setTitle(e.currentTarget.value);
-    }
-
-    const onClickAddTaskHandler = () => {
-        if (title.trim() !== '') {
-            props.addTask(props.id, title.trim());
-            setTitle('');
-        } else {
-            setError('Ошибка! Введите текст!')
-        }
-    }
-
-    const onKeyDownAddTaskHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            onClickAddTaskHandler();
-        }
+    const onClickAddTaskHandler = (newTaskTitle: string) => {
+        addTask(id, newTaskTitle);
     }
 
     const onChangeHandler = (taskId: string, e: ChangeEvent<HTMLInputElement>) => {
