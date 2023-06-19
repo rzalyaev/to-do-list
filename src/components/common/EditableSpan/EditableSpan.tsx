@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import Input from '../Input/Input';
+import {TextField} from "@mui/material";
 
 type PropsType = {
     value: string
@@ -26,11 +26,12 @@ const EditableSpan = ({value, changeBody}: PropsType) => {
 
     return (
         editMode
-            ? <Input value={inputBody}
-                     onChange={handleOnChange}
-                     onBlur={handleOnBlur}
-                     onKeyDown={handleEnterKeyDown}
-                     autoFocus={true}
+            ? <TextField variant={'standard'}
+                         value={inputBody}
+                         onChange={handleOnChange}
+                         onBlur={handleOnBlur}
+                         onKeyDown={handleEnterKeyDown}
+                         autoFocus={true}
             />
             : <span onDoubleClick={handleDoubleClick}>{value}</span>
     );
