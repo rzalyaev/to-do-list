@@ -41,10 +41,11 @@ const AddItemForm = ({addItem} :PropsType) => {
                 helperText={error}
                 size={'small'}
             />
-            <Button
-                name={'+'}
-                callBack={handleOnClick}
-            />
+            <IconButton
+                color={'primary'}
+                onClick={handleOnClick}>
+                <AddBox/>
+            </IconButton>
         </div>
     );
 };
