@@ -79,18 +79,21 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
                 {tasksElements}
             </ul>
             <div>
-                <Button className={filter === 'all' ? styles.activeFilter : ''}
-                        name={'All'}
-                        callBack={filterAllHandler}
-                />
-                <Button className={filter === 'active' ? styles.activeFilter : ''}
-                        name={'Active'}
-                        callBack={filterActiveHandler}
-                />
-                <Button className={filter === 'completed' ? styles.activeFilter : ''}
-                        name={'Completed'}
-                        callBack={filterCompletedHandler}
-                />
+                <Button color={filter === 'all' ? 'secondary' : 'primary'}
+                        variant={'contained'}
+                        onClick={filterAllHandler}
+                        sx={{mr: '3px'}}
+                >All</Button>
+                <Button color={filter === 'active' ? 'secondary' : 'primary'}
+                        variant={'contained'}
+                        onClick={filterActiveHandler}
+                        sx={{mr: '3px'}}
+                >Active</Button>
+                <Button color={filter === 'completed' ? 'secondary' : 'primary'}
+                        variant={'contained'}
+                        onClick={filterCompletedHandler}
+                        sx={{mr: '3px'}}
+                >Completed</Button>
             </div>
         </div>
     );
