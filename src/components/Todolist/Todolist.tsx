@@ -58,9 +58,9 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
                 <EditableSpan value={task.title}
                               changeBody={handleChangeTaskTitle}
                 />
-                <Button name={'X'}
-                        callBack={onClickRemoveTaskHandler}
-                />
+                <IconButton onClick={onClickRemoveTaskHandler}>
+                    <Delete/>
+                </IconButton>
             </li>
         )
     });
