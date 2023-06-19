@@ -4,6 +4,9 @@ import {TaskType, FilterType} from '../../App';
 import Button from '../common/Button';
 import AddItemForm from '../common/AddItemForm/AddItemForm';
 import EditableSpan from "../common/EditableSpan/EditableSpan";
+import {Button, Checkbox} from '@mui/material';
+import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 
 type PropsType = {
     id: string
@@ -48,7 +51,7 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
 
         return (
             <li key={task.id} className={task.isDone ? styles.isDone : ''}>
-                <input type="checkbox"
+                <Checkbox
                        checked={task.isDone}
                        onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeHandler(task.id, e)}
                 />
