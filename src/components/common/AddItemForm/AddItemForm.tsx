@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './AddItemForm.module.css';
-import Input from '../Input/Input';
-import Button from '../Button';
+import {IconButton, TextField} from '@mui/material';
+import {AddBox} from "@mui/icons-material";
 
 type PropsType = {
     addItem: (itemTitle: string) => void
@@ -33,11 +33,13 @@ const AddItemForm = ({addItem} :PropsType) => {
 
     return (
         <div>
-            <Input
+            <TextField
                 value={title}
                 onChange={handleOnChange}
                 onKeyDown={handleKeyDown}
-                error={error}
+                error={!!error}
+                helperText={error}
+                size={'small'}
             />
             <Button
                 name={'+'}
