@@ -70,7 +70,9 @@ const Todolist = ({id, title, filter, tasks, removeTodolist, changeTodolistTitle
                 <EditableSpan value={title}
                               changeBody={handleChangeTodolistTitle}
                 />
-                <Button name={'X'} callBack={handleOnClickRemoveTodolist}/>
+                <IconButton onClick={handleOnClickRemoveTodolist}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm addItem={onClickAddTaskHandler}/>
             <ul>
