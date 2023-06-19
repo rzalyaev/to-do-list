@@ -1,7 +1,6 @@
 import React, {ChangeEvent} from 'react';
 import styles from './Todolist.module.css';
 import {TaskType, FilterType} from '../../App';
-import Button from '../common/Button';
 import AddItemForm from '../common/AddItemForm/AddItemForm';
 import EditableSpan from "../common/EditableSpan/EditableSpan";
 import {Button, Checkbox} from '@mui/material';
