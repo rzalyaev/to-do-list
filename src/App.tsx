@@ -1,5 +1,14 @@
 import React from 'react';
 import './App.css';
+import {Todolist} from "./components/Todolist";
+
+type TaskType = {
+  id: number
+  title: string
+  isDone: boolean
+}
+
+export type TasksType = TaskType[]
 
 function App() {
   return (
