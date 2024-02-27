@@ -3,8 +3,8 @@ import './App.css';
 import {Todolist} from "./components/Todolist";
 import {v1} from "uuid";
 
-type TaskType = {
   id: number
+export type TaskType = {
   title: string
   isDone: boolean
 }
