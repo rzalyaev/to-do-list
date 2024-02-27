@@ -1,5 +1,5 @@
-import React from 'react';
-import {TasksType} from "../App";
+import React, {ChangeEvent, useState} from 'react';
+import {TasksType, TaskType} from "../App";
 import {Button} from "./Button/Button";
 import {v1} from "uuid";
 import {Input} from "./Input/Input";
