@@ -14,6 +14,10 @@ export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
 export const Todolist = ({title, tasks, date}: TodolistType) => {
   const [currentTasks, setCurrentTasks] = useState<TasksType>(tasks);
+  const addTask = (newTaskTitle: string) => {
+    const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
+    setCurrentTasks([newTask, ...currentTasks]);
+  }
   // Filtration --------------------------------------------------------------------------------------------------------
   const [filterMethod, setFilterMethod] = useState<FilterMethodType>('All');
   const filterTasks = (filterMethod: FilterMethodType) => {
@@ -33,6 +37,14 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
   const changeFilterMethodToActive = () => changeFilterMethod('Active');
   const changeFilterMethodToCompleted = () => changeFilterMethod('Completed');
 
+  // Add task form -----------------------------------------------------------------------------------------------------
+  const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
+  const changeTaskToAddTitle = (event: ChangeEvent<HTMLInputElement>) => setTaskToAddTitle(event.currentTarget.value);
+  const addTaskButtonOnClickHandler = () => {
+    addTask(taskToAddTitle);
+    setTaskToAddTitle('');
+  }
+
   // Tasks mapping -----------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
     return (
@@ -48,8 +60,8 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
       <div>
         <h3>{title}</h3>
         <div>
-          <input/>
-          <Button title={"+"}/>
+          <Input type={"text"} value={taskToAddTitle} onChangeHandler={changeTaskToAddTitle}/>
+          <Button title={"+"} onClick={addTaskButtonOnClickHandler}/>
         </div>
         <ul>
           {tasksList.length > 0 ? tasksList : "There is no task"}
