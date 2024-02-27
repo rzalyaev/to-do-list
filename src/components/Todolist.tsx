@@ -18,6 +18,9 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
     const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
     setCurrentTasks([newTask, ...currentTasks]);
   }
+  const removeTask = (taskId: string) => {
+    setCurrentTasks(currentTasks.filter(task => task.id !== taskId));
+  }
   // Filtration --------------------------------------------------------------------------------------------------------
   const [filterMethod, setFilterMethod] = useState<FilterMethodType>('All');
   const filterTasks = (filterMethod: FilterMethodType) => {
@@ -47,6 +50,7 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
 
   // Tasks mapping -----------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
+    const removeTaskButtonOnClickHandler = () => removeTask(task.id);
     return (
         <li key={task.id}>
           <Input type="checkbox" onChangeHandler={completionCheckboxOnChangeHandler} checked={task.isDone}/>
