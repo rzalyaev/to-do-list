@@ -13,9 +13,16 @@ type TodolistType = {
 export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
 export const Todolist = ({title, tasks, date}: TodolistType) => {
-  const tasksList = tasks.map(task => {
-    return <li key={task.id}><input type="checkbox" checked={task.isDone}/> <span>{task.title}</span></li>
   const [currentTasks, setCurrentTasks] = useState<TasksType>(tasks);
+  // Tasks mapping -----------------------------------------------------------------------------------------------------
+  const tasksList = filterTasks(filterMethod).map(task => {
+    return (
+        <li key={task.id}>
+          <Input type="checkbox" onChangeHandler={completionCheckboxOnChangeHandler} checked={task.isDone}/>
+          <span>{task.title}</span>
+          <Button title={"x"} onClick={removeTaskButtonOnClickHandler}/>
+        </li>
+    )
   })
 
   return (
