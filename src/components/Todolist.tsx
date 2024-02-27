@@ -2,12 +2,15 @@ import React from 'react';
 import {TasksType} from "../App";
 import {Button} from "./Button/Button";
 import {v1} from "uuid";
+import {Input} from "./Input/Input";
 
 type TodolistType = {
   title: string
   tasks: TasksType
   date?: string
 }
+
+export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
 export const Todolist = ({title, tasks, date}: TodolistType) => {
   const tasksList = tasks.map(task => {
