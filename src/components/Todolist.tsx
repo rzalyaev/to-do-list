@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {TasksType, TaskType} from "../App";
 import {Button} from "./Button/Button";
 import {v1} from "uuid";
@@ -54,7 +54,13 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
   const changeTaskToAddTitle = (event: ChangeEvent<HTMLInputElement>) => setTaskToAddTitle(event.currentTarget.value);
-  const addTaskButtonOnClickHandler = () => {
+  const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && taskToAddTitle.length > 0) {
+      addTask(taskToAddTitle);
+      setTaskToAddTitle('');
+    }
+  }
+  const addTaskByClickOnButton = () => {
     addTask(taskToAddTitle);
     setTaskToAddTitle('');
   }
@@ -76,8 +82,9 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
       <div>
         <h3>{title}</h3>
         <div>
-          <Input type={"text"} value={taskToAddTitle} onChangeHandler={changeTaskToAddTitle}/>
-          <Button title={"+"} onClick={addTaskButtonOnClickHandler}/>
+          <Input type={"text"} value={taskToAddTitle} onChangeHandler={changeTaskToAddTitle}
+                 onKeyUpHandler={addTaskByPressEnter}/>
+          <Button title={"+"} onClick={addTaskByClickOnButton} disabled={taskToAddTitle.length < 1}/>
         </div>
         <ul>
           {tasksList.length > 0 ? tasksList : "There is no task"}
