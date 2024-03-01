@@ -54,16 +54,32 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
 
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
-  const changeTaskToAddTitle = (event: ChangeEvent<HTMLInputElement>) => setTaskToAddTitle(event.currentTarget.value);
-  const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && taskToAddTitle.length > 0) {
-      addTask(taskToAddTitle);
+  const [error, setError] = useState('');
+  const newTaskTitleIsValid = (newTaskTitle: string) => {
+    if (newTaskTitle.trim().length > 0) {
+      return true;
+    } else {
+      setError('Title is required');
+      return false;
+    }
+  }
+  const changeTaskToAddTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.value.trim().length > 0) {
+      setError('');
+    }
+    setTaskToAddTitle(event.currentTarget.value);
+  }
+  const addTaskByClickOnButton = () => {
+    if (newTaskTitleIsValid(taskToAddTitle)) {
+      addTask(taskToAddTitle.trim());
       setTaskToAddTitle('');
     }
   }
-  const addTaskByClickOnButton = () => {
-    addTask(taskToAddTitle);
-    setTaskToAddTitle('');
+  const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && newTaskTitleIsValid(taskToAddTitle)) {
+      addTask(taskToAddTitle.trim());
+      setTaskToAddTitle('');
+    }
   }
 
   // Tasks mapping -----------------------------------------------------------------------------------------------------
