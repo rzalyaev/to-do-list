@@ -86,32 +86,61 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
   const tasksList = filterTasks(filterMethod).map(task => {
     const removeTaskButtonOnClickHandler = () => removeTask(task.id);
     const completionCheckboxOnChangeHandler = () => changeTaskCompletion(task.id);
+    const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
     return (
-        <li key={task.id}>
-          <Input type="checkbox" onChangeHandler={completionCheckboxOnChangeHandler} checked={task.isDone}/>
-          <span>{task.title}</span>
-          <Button title={"x"} onClick={removeTaskButtonOnClickHandler}/>
+        <li key={task.id} className={taskClassName}>
+          <Input type="checkbox"
+                 onChangeHandler={completionCheckboxOnChangeHandler}
+                 checked={task.isDone}
+                 className={styles.checkbox}
+          />
+          <div className={styles.taskBody}>
+            <div className={styles.taskTitle}><span className={styles.taskTitleBody}>{task.title}</span></div>
+            <Button title={"x"} onClickHandler={removeTaskButtonOnClickHandler} className={styles.deleteTaskButton}/>
+          </div>
         </li>
     )
   })
 
+  // Class names -------------------------------------------------------------------------------------------------------
+  const allFilterButtonClassName: string =
+      `${filterMethod === 'All' ? styles.activeFilterButton : styles.filterButton}`;
+  const activeFilterButtonClassName: string =
+      `${filterMethod === 'Active' ? styles.activeFilterButton : styles.filterButton}`;
+  const completedFilterButtonClassName: string =
+      `${filterMethod === 'Completed' ? styles.activeFilterButton : styles.filterButton}`;
+
   return (
-      <div>
-        <h3>{title}</h3>
+      <div className={styles.wrapper}>
+        <h3 className={styles.title}>{title}</h3>
         <div>
-          <Input type={"text"} value={taskToAddTitle} onChangeHandler={changeTaskToAddTitle}
-                 onKeyUpHandler={addTaskByPressEnter}/>
-          <Button title={"+"} onClick={addTaskByClickOnButton} disabled={taskToAddTitle.length < 1}/>
+          <div className={styles.addTaskForm}>
+            <Input type={"text"}
+                   value={taskToAddTitle}
+                   onChangeHandler={changeTaskToAddTitle}
+                   onKeyUpHandler={addTaskByPressEnter}
+            />
+            <Button title={"+"} onClickHandler={addTaskByClickOnButton}/>
+          </div>
+          <div className={styles.error}>{error}</div>
         </div>
-        <ul>
+        <ul className={styles.taskList}>
           {tasksList.length > 0 ? tasksList : "There is no task"}
         </ul>
-        <div>
-          <Button title={"All"} onClick={changeFilterMethodToAll}/>
-          <Button title={"Active"} onClick={changeFilterMethodToActive}/>
-          <Button title={"Completed"} onClick={changeFilterMethodToCompleted}/>
+        <div className={styles.filterButtons}>
+          <Button title={"All"}
+                  onClickHandler={changeFilterMethodToAll}
+                  className={allFilterButtonClassName}
+          />
+          <Button title={"Active"}
+                  onClickHandler={changeFilterMethodToActive}
+                  className={activeFilterButtonClassName}
+          />
+          <Button title={"Completed"}
+                  onClickHandler={changeFilterMethodToCompleted}
+                  className={completedFilterButtonClassName}
+          />
         </div>
-        <div>{date}</div>
       </div>
   );
 };
