@@ -27,6 +27,9 @@ function App() {
       <div className="App">
         <Todolist title={"What to learn"} tasks={tasks1} date={"26.02.2024"}/>
         <Todolist title={"Songs"} tasks={tasks2}/>
+        <div className={'header'}>
+          <h1>To-do List</h1>
+        </div>
       </div>
   );
 }
