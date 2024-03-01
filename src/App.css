@@ -1,8 +1,28 @@
 .App {
-  padding: 30px;
-  display: flex;
+
 }
 
-.App > div {
-  margin-right: 50px;
+.App > h1 {
+    text-align: center;
+}
+
+.header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid gray;
+    margin-bottom: 10px;
+    background-color: #90cdee;
+}
+
+.header > h1 {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.todoWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 15px;
 }
