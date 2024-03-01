@@ -2,7 +2,7 @@ import React from 'react';
 
 type ButtonType = {
   title: string
-  onClick?: () => void
+  onClickHandler?: () => void
   disabled?: boolean
   className?: string
   errorHandler?: () => void
