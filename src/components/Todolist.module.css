@@ -1,0 +1,98 @@
+.wrapper {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+}
+
+.addTaskForm {
+    display: flex;
+    gap: 5px;
+}
+
+.error {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: red;
+    min-height: 15px;
+}
+
+.taskList {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.task {
+    padding: 3px 5px;
+    border-radius: 3px;
+    display: flex;
+    gap: 5px;
+    transition: opacity 300ms ease-in-out;
+}
+
+.task:hover {
+    background-color: #fdd94c;
+}
+
+.isDone {
+    opacity: 0.5;
+    transition: 300ms ease-in-out;
+}
+
+.checkbox {
+    margin: 0 auto;
+    position: relative;
+    top: 1px;
+}
+
+.taskBody {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 3px;
+    cursor: pointer;
+}
+
+.taskTitle {
+    width: 100%;
+    overflow: auto;
+}
+
+.deleteTaskButton {
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    cursor: pointer;
+}
+
+.taskBody:hover {
+    .deleteTaskButton {
+        opacity: 1;
+        transition: 200ms ease-in-out;
+    }
+}
+
+.filterButtons {
+    display: flex;
+    gap: 7px;
+}
+
+.filterButton, .activeFilterButton {
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 3px;
+}
+
+.filterButton {
+    background-color: #e3e3e3;
+}
+
+.filterButton:hover {
+    background-color: #cbcbcb;
+    transition: background-color 200ms ease-in-out;
+}
+
+.activeFilterButton {
+    background-color: lightgreen;
+}
