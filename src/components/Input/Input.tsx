@@ -1,4 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent} from 'react';
+import styles from './Input.module.css';
 
 type InputPropsType = {
   type: string
@@ -7,15 +8,19 @@ type InputPropsType = {
   onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void
   onKeyUpHandler?: (event: KeyboardEvent<HTMLInputElement>) => void
   className?: string
+  placeholder?: string
 }
 
-export const Input = ({type, value, checked, onChangeHandler, onKeyUpHandler, className}: InputPropsType) => {
+export const Input = ({type, value, checked, onChangeHandler, onKeyUpHandler, className, placeholder}: InputPropsType) => {
+  const inputClassName: string = `${styles.input} ${className ? className : ''}`;
+
   return (
       <input type={type}
              value={value}
              onChange={onChangeHandler}
              checked={checked} onKeyDown={onKeyUpHandler}
-             className={className}
+             className={inputClassName}
+             placeholder={placeholder}
       />
   );
 };
