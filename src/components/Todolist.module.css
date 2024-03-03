@@ -4,9 +4,36 @@
     flex-direction: column;
 }
 
+.todolistHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.todolistHeader:hover {
+    .removeTodolistButton {
+        opacity: 1;
+    }
+}
+
+.removeTodolistButton {
+    opacity: 0.1;
+}
+
+.removeTodolistButton {
+    align-self: flex-end;
+    height: max-content;
+}
+
 .addTaskForm {
     display: flex;
-    gap: 5px;
+    justify-content: space-between;
+}
+
+.addTaskForm > button {
+    align-self: center;
+    height: max-content;
+    width: max-content;
 }
 
 .error {
@@ -29,7 +56,6 @@
     border-radius: 3px;
     display: flex;
     gap: 5px;
-    transition: opacity 300ms ease-in-out;
 }
 
 .task:hover {
@@ -38,7 +64,6 @@
 
 .isDone {
     opacity: 0.5;
-    transition: 300ms ease-in-out;
 }
 
 .checkbox {
@@ -62,14 +87,12 @@
 
 .deleteTaskButton {
     opacity: 0;
-    transition: 200ms ease-in-out;
     cursor: pointer;
 }
 
-.taskBody:hover {
+.task:hover, .taskBody:hover, .taskBody:focus {
     .deleteTaskButton {
         opacity: 1;
-        transition: 200ms ease-in-out;
     }
 }
 
