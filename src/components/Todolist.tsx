@@ -1,48 +1,50 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './Todolist.module.css';
-import {TasksType, TaskType} from "../App";
+import {FilterMethodType, TaskListType, TaskType} from "../App";
 import {Button} from "./Button/Button";
 import {v1} from "uuid";
 import {Input} from "./Input/Input";
 
 type TodolistType = {
+  id: string
   title: string
-  tasks: TasksType
+  taskList: TaskListType
+  setTaskList: React.Dispatch<React.SetStateAction<TaskListType>>
+  initialFilterMethod: FilterMethodType
   date?: string
+  removeHandler: (todolistId: string) => void
 }
 
-export type FilterMethodType = 'All' | 'Active' | 'Completed'
-
-export const Todolist = ({title, tasks, date}: TodolistType) => {
-  const [currentTasks, setCurrentTasks] = useState<TasksType>(tasks);
-  const addTask = (newTaskTitle: string) => {
+export const Todolist = ({id, title, taskList, setTaskList, initialFilterMethod, date, removeHandler}: TodolistType) => {
+  const removeTodolistHandler = () => removeHandler(id);
+  const addTask = (todolistId: string, newTaskTitle: string) => {
     const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
-    setCurrentTasks([newTask, ...currentTasks]);
+    setTaskList({...taskList, [todolistId]: [newTask, ...taskList[todolistId]]});
   }
-  const removeTask = (taskId: string) => {
-    setCurrentTasks(currentTasks.filter(task => task.id !== taskId));
+  const removeTask = (todolistId: string, taskId: string) => {
+    setTaskList({...taskList, [todolistId]: taskList[todolistId].filter(t => t.id !== taskId)});
   }
-  const changeTaskCompletion = (taskId: string) => {
-    const updatedTasks: TasksType = currentTasks.map(task => {
+  const changeTaskCompletion = (todolistId: string, taskId: string) => {
+    const updatedTasks: TaskType[] = taskList[todolistId].map(task => {
       if (task.id === taskId) {
         return {...task, isDone: !task.isDone};
       } else {
         return task;
       }
     });
-    setCurrentTasks(updatedTasks);
+    setTaskList({...taskList, [todolistId]: updatedTasks});
   }
 
   // Filtration --------------------------------------------------------------------------------------------------------
-  const [filterMethod, setFilterMethod] = useState<FilterMethodType>('All');
+  const [filterMethod, setFilterMethod] = useState<FilterMethodType>(initialFilterMethod);
   const filterTasks = (filterMethod: FilterMethodType) => {
     if (filterMethod === 'Active') {
-      return currentTasks.filter(task => !task.isDone);
+      return taskList[id].filter(task => !task.isDone);
     }
     if (filterMethod === 'Completed') {
-      return currentTasks.filter(task => task.isDone);
+      return taskList[id].filter(task => task.isDone);
     }
-    return currentTasks;
+    return taskList[id];
   }
   const changeFilterMethod = (newFilterMethod: FilterMethodType) => {
     setFilterMethod(newFilterMethod);
@@ -55,7 +57,7 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
   const [error, setError] = useState('');
-  const newTaskTitleIsValid = (newTaskTitle: string) => {
+  const isNewTaskTitleValid = (newTaskTitle: string) => {
     if (newTaskTitle.trim().length > 0) {
       return true;
     } else {
@@ -70,22 +72,22 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
     setTaskToAddTitle(event.currentTarget.value);
   }
   const addTaskByClickOnButton = () => {
-    if (newTaskTitleIsValid(taskToAddTitle)) {
-      addTask(taskToAddTitle.trim());
+    if (isNewTaskTitleValid(taskToAddTitle)) {
+      addTask(id, taskToAddTitle.trim());
       setTaskToAddTitle('');
     }
   }
   const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && newTaskTitleIsValid(taskToAddTitle)) {
-      addTask(taskToAddTitle.trim());
+    if (event.key === 'Enter' && isNewTaskTitleValid(taskToAddTitle)) {
+      addTask(id, taskToAddTitle.trim());
       setTaskToAddTitle('');
     }
   }
 
-  // Tasks mapping -----------------------------------------------------------------------------------------------------
+  // Task list mapping -----------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
-    const removeTaskButtonOnClickHandler = () => removeTask(task.id);
-    const completionCheckboxOnChangeHandler = () => changeTaskCompletion(task.id);
+    const removeTaskButtonOnClickHandler = () => removeTask(id, task.id);
+    const completionCheckboxOnChangeHandler = () => changeTaskCompletion(id, task.id);
     const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
     return (
         <li key={task.id} className={taskClassName}>
@@ -112,7 +114,10 @@ export const Todolist = ({title, tasks, date}: TodolistType) => {
 
   return (
       <div className={styles.wrapper}>
-        <h3 className={styles.title}>{title}</h3>
+        <div className={styles.todolistHeader}>
+          <h3 className={styles.title}>{title}</h3>
+          <Button title={'x'} onClickHandler={removeTodolistHandler} className={styles.removeTodolistButton} />
+        </div>
         <div>
           <div className={styles.addTaskForm}>
             <Input type={"text"}
