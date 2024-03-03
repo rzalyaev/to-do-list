@@ -1,23 +1,34 @@
-.App {
-
-}
-
-.App > h1 {
-    text-align: center;
-}
-
-.header {
+.headerWrapper {
     height: 50px;
     display: flex;
     align-items: center;
     border-bottom: 2px solid gray;
     margin-bottom: 10px;
-    background-color: #90cdee;
+    background-color: #00c4ff;
 }
 
-.header > h1 {
+.header {
     width: 1200px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.addTodolistForm {
+    position: relative;
+    top: 3px;
+    display: flex;
+    gap: 10px;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+    font-weight: 500;
+    position: relative;
+    right: 250px;
+    bottom: 17px;
 }
 
 .todoWrapper {
