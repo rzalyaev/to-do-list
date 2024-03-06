@@ -22,15 +22,6 @@
     gap: 10px;
 }
 
-.error {
-    color: red;
-    font-size: 0.8rem;
-    font-weight: 500;
-    position: relative;
-    right: 250px;
-    bottom: 17px;
-}
-
 .todoWrapper {
     max-width: 1200px;
     margin: 0 auto;
