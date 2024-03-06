@@ -44,11 +44,11 @@
 }
 
 .taskList {
+    margin: 5px 0 10px 0;
     list-style-type: none;
     display: flex;
     flex-direction: column;
     gap: 3px;
-    margin-bottom: 10px;
 }
 
 .task {
