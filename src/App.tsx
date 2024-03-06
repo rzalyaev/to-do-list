@@ -1,9 +1,8 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import './App.css';
 import {Todolist} from "./components/Todolist";
 import {v1} from "uuid";
-import {Input} from "./components/Input/Input";
-import {Button} from "./components/Button/Button";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 
 export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
@@ -68,7 +67,7 @@ function App() {
   }
 
   // CRUD operations ---------------------------------------------------------------------------------------------------
-  const addTodolist = (newTodolistTitle: string) => {
+  const addTodolistByClickOnButton = (newTodolistTitle: string) => {
     if (isNewTodolistTitleValid(newTodolistTitle)) {
       const newTodolistId: string = v1()
       const newTodolist: TodolistType = {id: newTodolistId, title: newTodolistTitle.trim(), initialFilterMethod: "All"};
@@ -77,22 +76,35 @@ function App() {
       setCurrentTodolistTitle('');
     }
   }
+  const addTodolistByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      addTodolistByClickOnButton(currentTodolistTitle);
+    }
+  }
   const removeTodolist = (todolistId: string) => {
     setTodolists(todolists.filter(t => t.id !== todolistId));
     delete(taskList[todolistId]);
   }
 
+  // Todolist title changing -------------------------------------------------------------------------------------------
+  const changeTodolistTitle = (todolistId: string, title: string) => {
+    setTodolists(todolists.map(t => t.id === todolistId ? {...t, title} : t));
+  }
+
   // Event handlers ----------------------------------------------------------------------------------------------------
-  const inputOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.value.trim().length > 0) {
       setErrorStatus('');
     }
     setCurrentTodolistTitle(event.currentTarget.value);
   }
-  const buttonOnClickHandler = () => addTodolist(currentTodolistTitle);
+  const handleInputOnKeyUp = (event: KeyboardEvent<HTMLInputElement>) => addTodolistByPressEnter(event);
+  const handleButtonOnClick = () => addTodolistByClickOnButton(currentTodolistTitle);
 
   // To-do Lists mapping -----------------------------------------------------------------------------------------------
   const mappedTodolists = todolists.map(t => {
+    const handleRemoveTodolist = () => removeTodolist(t.id);
+    const handleChangeTodolistTitle = (title: string) => changeTodolistTitle(t.id, title);
     return (
         <Todolist
             id={t.id}
@@ -100,7 +112,8 @@ function App() {
             taskList={taskList}
             setTaskList={setTaskList}
             initialFilterMethod={t.initialFilterMethod}
-            removeHandler={removeTodolist}
+            handleRemoveTodolist={handleRemoveTodolist}
+            handleChangeTodolistTitle={handleChangeTodolistTitle}
         />
     )
   })
@@ -110,14 +123,16 @@ function App() {
         <div className='headerWrapper'>
           <div className='header'>
             <h1>To-do List</h1>
-            <div className='addTodolistForm'>
-              <Input type={'text'}
-                     value={currentTodolistTitle}
-                     onChangeHandler={inputOnChangeHandler}
-              />
-              <Button title={'Add'} onClickHandler={buttonOnClickHandler} className={'addTodolistButton'}/>
-              <div className='error'>{errorStatus}</div>
-            </div>
+            <AddItemForm type={'text'}
+                         value={currentTodolistTitle}
+                         onChangeHandler={handleInputOnChange}
+                         onKeyUpHandler={handleInputOnKeyUp}
+                         placeholder={'Enter to-do list title...'}
+                         title={'Add'}
+                         onClickHandler={handleButtonOnClick}
+                         errorStatus={errorStatus}
+                         className={'addTodolistForm'}
+            />
           </div>
         </div>
         <div className={'todoWrapper'}>
