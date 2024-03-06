@@ -4,6 +4,8 @@ import {FilterMethodType, TaskListType, TaskType} from "../App";
 import {Button} from "./Button/Button";
 import {v1} from "uuid";
 import {Input} from "./Input/Input";
+import {AddItemForm} from "./AddItemForm/AddItemForm";
+import {EditableSpan} from "./EditableSpan/EditableSpan";
 
 type TodolistType = {
   id: string
@@ -12,11 +14,14 @@ type TodolistType = {
   setTaskList: React.Dispatch<React.SetStateAction<TaskListType>>
   initialFilterMethod: FilterMethodType
   date?: string
-  removeHandler: (todolistId: string) => void
+  handleRemoveTodolist: () => void
+  handleChangeTodolistTitle: (title: string) => void
 }
 
-export const Todolist = ({id, title, taskList, setTaskList, initialFilterMethod, date, removeHandler}: TodolistType) => {
-  const removeTodolistHandler = () => removeHandler(id);
+export const Todolist = ({
+                           id, title, taskList, setTaskList,
+                           initialFilterMethod, handleRemoveTodolist, handleChangeTodolistTitle
+}: TodolistType) => {
   const addTask = (todolistId: string, newTaskTitle: string) => {
     const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
     setTaskList({...taskList, [todolistId]: [newTask, ...taskList[todolistId]]});
@@ -36,7 +41,8 @@ export const Todolist = ({id, title, taskList, setTaskList, initialFilterMethod,
   }
 
   // Filtration --------------------------------------------------------------------------------------------------------
-  const [filterMethod, setFilterMethod] = useState<FilterMethodType>(initialFilterMethod);
+  const [filterMethod, setFilterMethod]
+      = useState<FilterMethodType>(initialFilterMethod);
   const filterTasks = (filterMethod: FilterMethodType) => {
     if (filterMethod === 'Active') {
       return taskList[id].filter(task => !task.isDone);
@@ -78,27 +84,43 @@ export const Todolist = ({id, title, taskList, setTaskList, initialFilterMethod,
     }
   }
   const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && isNewTaskTitleValid(taskToAddTitle)) {
-      addTask(id, taskToAddTitle.trim());
-      setTaskToAddTitle('');
+    if (event.key === 'Enter') {
+      addTaskByClickOnButton();
     }
   }
 
-  // Task list mapping -----------------------------------------------------------------------------------------------------
+  // Task title changing -----------------------------------------------------------------------------------------------
+  const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
+    if (title.trim() !== '') {
+      setTaskList({
+        ...taskList,
+        [todolistId]: taskList[todolistId]
+            .map(task => task.id === taskId ? {...task, title: title.trim()} : task)
+      })
+    } else {
+      setTaskList(taskList);
+    }
+  }
+
+  // Task list mapping -------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
-    const removeTaskButtonOnClickHandler = () => removeTask(id, task.id);
-    const completionCheckboxOnChangeHandler = () => changeTaskCompletion(id, task.id);
+    const handleChangeTaskCompletion = () => changeTaskCompletion(id, task.id);
+    const handleRemoveTask = () => removeTask(id, task.id);
+    const handleChangeTaskTitle = (title: string) => changeTaskTitle(id, task.id, title);
     const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
     return (
         <li key={task.id} className={taskClassName}>
           <Input type="checkbox"
-                 onChangeHandler={completionCheckboxOnChangeHandler}
+                 onChangeHandler={handleChangeTaskCompletion}
                  checked={task.isDone}
-                 className={styles.checkbox}
+                 inputClassName={styles.checkbox}
           />
           <div className={styles.taskBody}>
-            <div className={styles.taskTitle}><span className={styles.taskTitleBody}>{task.title}</span></div>
-            <Button title={"x"} onClickHandler={removeTaskButtonOnClickHandler} className={styles.deleteTaskButton}/>
+            <EditableSpan initialTitle={task.title} handleOnBlur={handleChangeTaskTitle}/>
+            <Button title={"x"}
+                    onClickHandler={handleRemoveTask}
+                    buttonClassName={styles.deleteTaskButton}
+            />
           </div>
         </li>
     )
@@ -115,35 +137,36 @@ export const Todolist = ({id, title, taskList, setTaskList, initialFilterMethod,
   return (
       <div className={styles.wrapper}>
         <div className={styles.todolistHeader}>
-          <h3 className={styles.title}>{title}</h3>
-          <Button title={'x'} onClickHandler={removeTodolistHandler} className={styles.removeTodolistButton} />
+          <h3 className={styles.title}>
+            <EditableSpan initialTitle={title} handleOnBlur={handleChangeTodolistTitle}/>
+          </h3>
+          <Button title={'x'} onClickHandler={handleRemoveTodolist} buttonClassName={styles.removeTodolistButton}/>
         </div>
-        <div>
-          <div className={styles.addTaskForm}>
-            <Input type={"text"}
-                   value={taskToAddTitle}
-                   onChangeHandler={changeTaskToAddTitle}
-                   onKeyUpHandler={addTaskByPressEnter}
-            />
-            <Button title={"+"} onClickHandler={addTaskByClickOnButton}/>
-          </div>
-          <div className={styles.error}>{error}</div>
-        </div>
+        <AddItemForm type={'text'}
+                     value={taskToAddTitle}
+                     onChangeHandler={changeTaskToAddTitle}
+                     onKeyUpHandler={addTaskByPressEnter}
+                     placeholder={'Enter task title...'}
+                     title={'+'}
+                     onClickHandler={addTaskByClickOnButton}
+                     errorStatus={error}
+                     className={styles.addTaskForm}
+        />
         <ul className={styles.taskList}>
           {tasksList.length > 0 ? tasksList : "There is no task"}
         </ul>
         <div className={styles.filterButtons}>
           <Button title={"All"}
                   onClickHandler={changeFilterMethodToAll}
-                  className={allFilterButtonClassName}
+                  buttonClassName={allFilterButtonClassName}
           />
           <Button title={"Active"}
                   onClickHandler={changeFilterMethodToActive}
-                  className={activeFilterButtonClassName}
+                  buttonClassName={activeFilterButtonClassName}
           />
           <Button title={"Completed"}
                   onClickHandler={changeFilterMethodToCompleted}
-                  className={completedFilterButtonClassName}
+                  buttonClassName={completedFilterButtonClassName}
           />
         </div>
       </div>
