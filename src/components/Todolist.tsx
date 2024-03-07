@@ -29,10 +29,10 @@ export const Todolist = ({
   const removeTask = (todolistId: string, taskId: string) => {
     setTaskList({...taskList, [todolistId]: taskList[todolistId].filter(t => t.id !== taskId)});
   }
-  const changeTaskCompletion = (todolistId: string, taskId: string) => {
+  const changeTaskCompletion = (todolistId: string, taskId: string, isDone: boolean) => {
     const updatedTasks: TaskType[] = taskList[todolistId].map(task => {
       if (task.id === taskId) {
-        return {...task, isDone: !task.isDone};
+        return {...task, isDone};
       } else {
         return task;
       }
@@ -104,7 +104,9 @@ export const Todolist = ({
 
   // Task list mapping -------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
-    const handleChangeTaskCompletion = () => changeTaskCompletion(id, task.id);
+    const handleChangeTaskCompletion = (event: ChangeEvent<HTMLInputElement>) => {
+      changeTaskCompletion(id, task.id, event.currentTarget.checked);
+    }
     const handleRemoveTask = () => removeTask(id, task.id);
     const handleChangeTaskTitle = (title: string) => changeTaskTitle(id, task.id, title);
     const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
