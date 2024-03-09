@@ -3,6 +3,8 @@ import './App.css';
 import {Todolist} from "./components/Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
+import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@mui/material";
+import { Menu } from '@mui/icons-material';
 
 export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
@@ -120,24 +122,31 @@ function App() {
 
   return (
       <div>
-        <div className='headerWrapper'>
-          <div className='header'>
-            <h1>To-do List</h1>
-            <AddItemForm type={'text'}
-                         value={currentTodolistTitle}
-                         onChangeHandler={handleInputOnChange}
-                         onKeyUpHandler={handleInputOnKeyUp}
-                         placeholder={'Enter to-do list title...'}
-                         title={'Add'}
-                         onClickHandler={handleButtonOnClick}
-                         errorStatus={errorStatus}
-                         className={'addTodolistForm'}
-            />
-          </div>
-        </div>
-        <div className={'todoWrapper'}>
-          {mappedTodolists}
-        </div>
+        <AppBar position={'static'}>
+          <Toolbar sx={{width: '1200px', margin: '0 auto'}}>
+            <IconButton edge={'start'} color={'inherit'} aria-label={'menu'}>
+              <Menu/>
+            </IconButton>
+            <Typography variant={'h6'} sx={{flexGrow: 1, mr: 2}}>
+              Todolist
+            </Typography>
+            <Button color={'inherit'}>Login</Button>
+          </Toolbar>
+        </AppBar>
+        <Container fixed sx={{padding: '20px 0'}}>
+          <AddItemForm type={'text'}
+                       value={currentTodolistTitle}
+                       onChangeHandler={handleInputOnChange}
+                       onKeyUpHandler={handleInputOnKeyUp}
+                       placeholder={'Enter to-do list title...'}
+                       title={'Add'}
+                       onClickHandler={handleButtonOnClick}
+                       errorStatus={errorStatus}
+          />
+          <Grid container sx={{marginTop: '10px',gap: '15px'}}>
+            {mappedTodolists}
+          </Grid>
+        </Container>
       </div>
   );
 }
