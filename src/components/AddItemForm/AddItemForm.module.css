@@ -1,24 +1,5 @@
-.addItemForm {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    margin-bottom: 0.7rem;
-}
-
 .inputAndButton {
     display: flex;
     align-items: center;
     gap: 5px;
-}
-
-.button {
-    height: max-content;
-}
-
-.error {
-    position: absolute;
-    top: 22px;
-    color: red;
-    font-size: 0.7rem;
-    font-weight: 500;
 }
