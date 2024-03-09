@@ -1,7 +1,10 @@
 .wrapper {
-    width: 220px;
+    padding: 10px;
+    width: max-content;
     display: flex;
     flex-direction: column;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 }
 
 .todolistHeader {
@@ -44,15 +47,14 @@
 }
 
 .taskList {
-    margin: 5px 0 10px 0;
-    list-style-type: none;
+    margin: 5px 0 0 0;
     display: flex;
     flex-direction: column;
     gap: 3px;
+    list-style-type: none;
 }
 
 .task {
-    padding: 3px 5px;
     border-radius: 3px;
     display: flex;
     gap: 5px;
@@ -73,9 +75,8 @@
 }
 
 .taskBody {
-    width: 100%;
+    flex-grow: 1;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 3px;
     cursor: pointer;
@@ -98,8 +99,10 @@
 }
 
 .filterButtons {
+    margin: 5px 0 0 0;
     display: flex;
-    gap: 7px;
+    justify-content: space-between;
+    gap: 5px;
 }
 
 .filterButton, .activeFilterButton {
