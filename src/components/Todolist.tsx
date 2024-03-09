@@ -1,11 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './Todolist.module.css';
 import {FilterMethodType, TaskListType, TaskType} from "../App";
-import {Button} from "./Button/Button";
 import {v1} from "uuid";
-import {Input} from "./Input/Input";
 import {AddItemForm} from "./AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
+import {Button, Checkbox, IconButton} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type TodolistType = {
   id: string
@@ -112,37 +112,24 @@ export const Todolist = ({
     const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
     return (
         <li key={task.id} className={taskClassName}>
-          <Input type="checkbox"
-                 onChangeHandler={handleChangeTaskCompletion}
-                 checked={task.isDone}
-                 inputClassName={styles.checkbox}
-          />
+          <Checkbox checked={task.isDone} onChange={handleChangeTaskCompletion}/>
           <div className={styles.taskBody}>
             <EditableSpan initialTitle={task.title} handleOnBlur={handleChangeTaskTitle}/>
-            <Button title={"x"}
-                    onClickHandler={handleRemoveTask}
-                    buttonClassName={styles.deleteTaskButton}
-            />
+            <IconButton aria-label="delete" onClick={handleRemoveTask} size={'small'}>
+              <DeleteIcon />
+            </IconButton>
           </div>
         </li>
     )
   })
 
-  // Class names -------------------------------------------------------------------------------------------------------
-  const allFilterButtonClassName: string =
-      `${filterMethod === 'All' ? styles.activeFilterButton : styles.filterButton}`;
-  const activeFilterButtonClassName: string =
-      `${filterMethod === 'Active' ? styles.activeFilterButton : styles.filterButton}`;
-  const completedFilterButtonClassName: string =
-      `${filterMethod === 'Completed' ? styles.activeFilterButton : styles.filterButton}`;
-
   return (
       <div className={styles.wrapper}>
         <div className={styles.todolistHeader}>
-          <h3 className={styles.title}>
-            <EditableSpan initialTitle={title} handleOnBlur={handleChangeTodolistTitle}/>
-          </h3>
-          <Button title={'x'} onClickHandler={handleRemoveTodolist} buttonClassName={styles.removeTodolistButton}/>
+          <EditableSpan initialTitle={title} handleOnBlur={handleChangeTodolistTitle}/>
+          <IconButton aria-label="delete" onClick={handleRemoveTodolist}>
+            <DeleteIcon />
+          </IconButton>
         </div>
         <AddItemForm type={'text'}
                      value={taskToAddTitle}
@@ -158,18 +145,21 @@ export const Todolist = ({
           {tasksList.length > 0 ? tasksList : "There is no task"}
         </ul>
         <div className={styles.filterButtons}>
-          <Button title={"All"}
-                  onClickHandler={changeFilterMethodToAll}
-                  buttonClassName={allFilterButtonClassName}
-          />
-          <Button title={"Active"}
-                  onClickHandler={changeFilterMethodToActive}
-                  buttonClassName={activeFilterButtonClassName}
-          />
-          <Button title={"Completed"}
-                  onClickHandler={changeFilterMethodToCompleted}
-                  buttonClassName={completedFilterButtonClassName}
-          />
+          <Button variant={filterMethod === 'All' ? 'contained' : 'outlined'}
+                  size={'small'}
+                  onClick={changeFilterMethodToAll}
+                  disableElevation
+          >All</Button>
+          <Button variant={filterMethod === 'Active' ? 'contained' : 'outlined'}
+                  size={'small'}
+                  onClick={changeFilterMethodToActive}
+                  disableElevation
+          >Active</Button>
+          <Button variant={filterMethod === 'Completed' ? 'contained' : 'outlined'}
+                  size={'small'}
+                  onClick={changeFilterMethodToCompleted}
+                  disableElevation
+          >Completed</Button>
         </div>
       </div>
   );
