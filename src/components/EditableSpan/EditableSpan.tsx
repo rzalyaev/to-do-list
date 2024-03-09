@@ -1,7 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
-import styles from './EditableSpan.module.css';
-import {Input} from "../Input/Input";
-import {TaskType} from "../../App";
+import {TextField, Typography} from "@mui/material";
 
 type EditableSpanPropsType = {
   initialTitle: string
@@ -23,11 +21,14 @@ export const EditableSpan = ({initialTitle, handleOnBlur}: EditableSpanPropsType
 
   if (changeMode) {
     return (
-        <Input type={'text'}
-               value={currentTitle}
-               onChangeHandler={handleChangeCurrentTitle}
-               onBlurHandler={handleChangeTaskTitle}
-               inputClassName={styles.input}
+        <TextField id="outlined-basic"
+                   variant="outlined"
+                   size={'small'}
+                   value={currentTitle}
+                   onChange={handleChangeCurrentTitle}
+                   onBlur={handleChangeTaskTitle}
+                   autoFocus={true}
+                   sx={{flexGrow: 1}}
         />
     )
   } else {
