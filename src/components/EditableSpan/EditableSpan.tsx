@@ -33,7 +33,11 @@ export const EditableSpan = ({initialTitle, handleOnBlur}: EditableSpanPropsType
     )
   } else {
     return (
-        <span onDoubleClick={handleToggleChangeMode}>{initialTitle}</span>
+        <Typography variant={'h6'}
+                    onDoubleClick={handleToggleChangeMode}
+                    sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}>
+          {initialTitle}
+        </Typography>
     )
   }
 };
