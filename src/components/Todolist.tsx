@@ -1,17 +1,23 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './Todolist.module.css';
-import {FilterMethodType, TaskListType, TaskType} from "../App";
-import {v1} from "uuid";
+import {FilterMethodType, TaskListType} from "../App";
 import {AddItemForm} from "./AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {Button, Checkbox, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  addTaskAC,
+  changeTaskCompletionAC, changeTaskTitleAC,
+  removeTaskAC,
+  TaskListAction,
+  TasksReducerActionTypes
+} from "../reducers/tasksReducer";
 
 type TodolistType = {
   id: string
   title: string
   taskList: TaskListType
-  setTaskList: React.Dispatch<React.SetStateAction<TaskListType>>
+  dispatchTaskList: React.Dispatch<TaskListAction>
   initialFilterMethod: FilterMethodType
   date?: string
   handleRemoveTodolist: () => void
@@ -19,25 +25,20 @@ type TodolistType = {
 }
 
 export const Todolist = ({
-                           id, title, taskList, setTaskList,
+                           id, title, taskList, dispatchTaskList,
                            initialFilterMethod, handleRemoveTodolist, handleChangeTodolistTitle
-}: TodolistType) => {
+                         }: TodolistType) => {
   const addTask = (todolistId: string, newTaskTitle: string) => {
-    const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
-    setTaskList({...taskList, [todolistId]: [newTask, ...taskList[todolistId]]});
+    dispatchTaskList(addTaskAC(todolistId, newTaskTitle));
   }
   const removeTask = (todolistId: string, taskId: string) => {
-    setTaskList({...taskList, [todolistId]: taskList[todolistId].filter(t => t.id !== taskId)});
+    dispatchTaskList(removeTaskAC(todolistId, taskId));
   }
   const changeTaskCompletion = (todolistId: string, taskId: string, isDone: boolean) => {
-    const updatedTasks: TaskType[] = taskList[todolistId].map(task => {
-      if (task.id === taskId) {
-        return {...task, isDone};
-      } else {
-        return task;
-      }
-    });
-    setTaskList({...taskList, [todolistId]: updatedTasks});
+    dispatchTaskList(changeTaskCompletionAC(todolistId, taskId, isDone));
+  }
+  const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
+    dispatchTaskList(changeTaskTitleAC(todolistId, taskId, title));
   }
 
   // Filtration --------------------------------------------------------------------------------------------------------
@@ -89,19 +90,6 @@ export const Todolist = ({
     }
   }
 
-  // Task title changing -----------------------------------------------------------------------------------------------
-  const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
-    if (title.trim() !== '') {
-      setTaskList({
-        ...taskList,
-        [todolistId]: taskList[todolistId]
-            .map(task => task.id === taskId ? {...task, title: title.trim()} : task)
-      })
-    } else {
-      setTaskList(taskList);
-    }
-  }
-
   // Task list mapping -------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
     const handleChangeTaskCompletion = (event: ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +104,7 @@ export const Todolist = ({
           <div className={styles.taskBody}>
             <EditableSpan initialTitle={task.title} handleOnBlur={handleChangeTaskTitle}/>
             <IconButton aria-label="delete" onClick={handleRemoveTask} size={'small'}>
-              <DeleteIcon />
+              <DeleteIcon/>
             </IconButton>
           </div>
         </li>
@@ -128,7 +116,7 @@ export const Todolist = ({
         <div className={styles.todolistHeader}>
           <EditableSpan initialTitle={title} handleOnBlur={handleChangeTodolistTitle}/>
           <IconButton aria-label="delete" onClick={handleRemoveTodolist}>
-            <DeleteIcon />
+            <DeleteIcon/>
           </IconButton>
         </div>
         <AddItemForm type={'text'}

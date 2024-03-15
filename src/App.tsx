@@ -1,19 +1,26 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useReducer, useState} from 'react';
 import './App.css';
 import {Todolist} from "./components/Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@mui/material";
 import { Menu } from '@mui/icons-material';
+import {
+  addTodolistAC, changeTodolistTitleAC,
+  removeTodolistAC,
+  todolistsReducer,
+  TodolistsReducerActionTypes
+} from "./reducers/todolistsReducer";
+import {tasksReducer, TasksReducerActionTypes} from "./reducers/tasksReducer";
 
 export type FilterMethodType = 'All' | 'Active' | 'Completed'
 
-type TodolistType = {
+export type TodolistType = {
   id: string
   title: string
   initialFilterMethod: FilterMethodType
 }
-type TodolistsType = TodolistType[]
+export type TodolistsType = TodolistType[]
 
 export type TaskType = {
   id: string
@@ -49,13 +56,10 @@ function App() {
     ]
   }
 
-  // UseState hooks ----------------------------------------------------------------------------------------------------
-  const [todolists, setTodolists]
-      = useState<TodolistsType>(initialTodolists);
-  const [taskList, setTaskList]
-      = useState<TaskListType>(initialTaskList);
-  const [currentTodolistTitle, setCurrentTodolistTitle]
-      = useState<string>('');
+  // Hooks ----------------------------------------------------------------------------------------------------
+  const [todolists, dispatchTodolists] = useReducer(todolistsReducer, initialTodolists);
+  const [taskList, dispatchTaskList] = useReducer(tasksReducer, initialTaskList);
+  const [currentTodolistTitle, setCurrentTodolistTitle] = useState<string>('');
   const [errorStatus, setErrorStatus] = useState<string>('');
 
   // Error checking ----------------------------------------------------------------------------------------------------
@@ -72,9 +76,8 @@ function App() {
   const addTodolistByClickOnButton = (newTodolistTitle: string) => {
     if (isNewTodolistTitleValid(newTodolistTitle)) {
       const newTodolistId: string = v1()
-      const newTodolist: TodolistType = {id: newTodolistId, title: newTodolistTitle.trim(), initialFilterMethod: "All"};
-      setTodolists([...todolists, newTodolist]);
-      setTaskList({...taskList, [newTodolistId]: []});
+      dispatchTodolists(addTodolistAC(newTodolistId, newTodolistTitle));
+      dispatchTaskList(addTodolistAC(newTodolistId, newTodolistTitle));
       setCurrentTodolistTitle('');
     }
   }
@@ -84,13 +87,11 @@ function App() {
     }
   }
   const removeTodolist = (todolistId: string) => {
-    setTodolists(todolists.filter(t => t.id !== todolistId));
-    delete(taskList[todolistId]);
+    dispatchTodolists(removeTodolistAC(todolistId));
+    dispatchTaskList(removeTodolistAC(todolistId));
   }
-
-  // Todolist title changing -------------------------------------------------------------------------------------------
   const changeTodolistTitle = (todolistId: string, title: string) => {
-    setTodolists(todolists.map(t => t.id === todolistId ? {...t, title} : t));
+    dispatchTodolists(changeTodolistTitleAC(todolistId, title));
   }
 
   // Event handlers ----------------------------------------------------------------------------------------------------
@@ -112,7 +113,7 @@ function App() {
             id={t.id}
             title={t.title}
             taskList={taskList}
-            setTaskList={setTaskList}
+            dispatchTaskList={dispatchTaskList}
             initialFilterMethod={t.initialFilterMethod}
             handleRemoveTodolist={handleRemoveTodolist}
             handleChangeTodolistTitle={handleChangeTodolistTitle}
