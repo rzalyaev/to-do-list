@@ -39,7 +39,7 @@ export const todolistsReducer = (state: TodolistsType = initialState, action: To
     case TodolistsReducerActionTypes.CHANGE_TODOLIST_TITLE:
       return state.map(todolist =>
           todolist.id === action.todolistId ? {...todolist, title: action.title} : todolist);
-    default: throw new Error('Unknown action type');
+    default: return state;
   }
 }
 

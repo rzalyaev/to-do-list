@@ -73,7 +73,7 @@ export const tasksReducer = (state: TaskListType = initialState, action: TaskLis
       } else {
         return state;
       }
-    default: throw new Error('Unknown action type');
+    default: return state;
   }
 }
 
