@@ -18,10 +18,11 @@ type TodolistType = {
   title: string
   taskList: TaskListType
   dispatchTaskList: React.Dispatch<TaskListAction>
-  initialFilterMethod: FilterMethodType
+  filterMethod: FilterMethodType
   date?: string
   handleRemoveTodolist: () => void
   handleChangeTodolistTitle: (title: string) => void
+  handleChangeTodolistFilterMethod: (newFilterMethod: FilterMethodType) => void
 }
 
 export const Todolist = ({
@@ -42,8 +43,6 @@ export const Todolist = ({
   }
 
   // Filtration --------------------------------------------------------------------------------------------------------
-  const [filterMethod, setFilterMethod]
-      = useState<FilterMethodType>(initialFilterMethod);
   const filterTasks = (filterMethod: FilterMethodType) => {
     if (filterMethod === 'Active') {
       return taskList[id].filter(task => !task.isDone);
@@ -53,13 +52,9 @@ export const Todolist = ({
     }
     return taskList[id];
   }
-  const changeFilterMethod = (newFilterMethod: FilterMethodType) => {
-    setFilterMethod(newFilterMethod);
-    filterTasks(filterMethod);
-  }
-  const changeFilterMethodToAll = () => changeFilterMethod('All');
-  const changeFilterMethodToActive = () => changeFilterMethod('Active');
-  const changeFilterMethodToCompleted = () => changeFilterMethod('Completed');
+  const changeFilterMethodToAll = () => handleChangeTodolistFilterMethod('All');
+  const changeFilterMethodToActive = () => handleChangeTodolistFilterMethod('Active');
+  const changeFilterMethodToCompleted = () => handleChangeTodolistFilterMethod('Completed');
 
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
