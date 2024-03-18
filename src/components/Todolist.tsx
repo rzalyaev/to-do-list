@@ -5,19 +5,14 @@ import {AddItemForm} from "./AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {Button, Checkbox, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  addTaskAC,
-  changeTaskCompletionAC, changeTaskTitleAC,
-  removeTaskAC,
-  TaskListAction,
-  TasksReducerActionTypes
-} from "../reducers/tasksReducer";
+import {addTaskAC, changeTaskCompletionAC, changeTaskTitleAC, removeTaskAC} from "../reducers/tasksReducer";
+import {Dispatch, UnknownAction} from "redux";
 
 type TodolistType = {
   id: string
   title: string
   taskList: TaskListType
-  dispatchTaskList: React.Dispatch<TaskListAction>
+  dispatch: Dispatch<UnknownAction>
   filterMethod: FilterMethodType
   date?: string
   handleRemoveTodolist: () => void
@@ -26,20 +21,20 @@ type TodolistType = {
 }
 
 export const Todolist = ({
-                           id, title, taskList, dispatchTaskList,
-                           initialFilterMethod, handleRemoveTodolist, handleChangeTodolistTitle
+                           id, title, taskList, dispatch, filterMethod,
+                           handleRemoveTodolist, handleChangeTodolistTitle, handleChangeTodolistFilterMethod
                          }: TodolistType) => {
   const addTask = (todolistId: string, newTaskTitle: string) => {
-    dispatchTaskList(addTaskAC(todolistId, newTaskTitle));
+    dispatch(addTaskAC(todolistId, newTaskTitle));
   }
   const removeTask = (todolistId: string, taskId: string) => {
-    dispatchTaskList(removeTaskAC(todolistId, taskId));
+    dispatch(removeTaskAC(todolistId, taskId));
   }
   const changeTaskCompletion = (todolistId: string, taskId: string, isDone: boolean) => {
-    dispatchTaskList(changeTaskCompletionAC(todolistId, taskId, isDone));
+    dispatch(changeTaskCompletionAC(todolistId, taskId, isDone));
   }
   const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
-    dispatchTaskList(changeTaskTitleAC(todolistId, taskId, title));
+    dispatch(changeTaskTitleAC(todolistId, taskId, title));
   }
 
   // Filtration --------------------------------------------------------------------------------------------------------
