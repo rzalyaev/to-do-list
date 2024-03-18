@@ -1,9 +1,10 @@
-import {TodolistsType, TodolistType} from "../App";
+import {FilterMethodType, TodolistsType, TodolistType} from "../App";
 
 export enum TodolistsReducerActionTypes {
   ADD_TODOLIST = 'reducers/todolistsReducer/ADD-TODOLIST',
   REMOVE_TODOLIST = 'reducers/todolistsReducer/REMOVE_TODOLIST',
-  CHANGE_TODOLIST_TITLE = 'reducers/todolistsReducer/CHANGE-TODOLIST-TITLE'
+  CHANGE_TODOLIST_TITLE = 'reducers/todolistsReducer/CHANGE-TODOLIST-TITLE',
+  CHANGE_TODOLIST_FILTER_METHOD = 'reducers/todolistsReducer/CHANGE-TODOLIST-FILTER-METHOD'
 }
 
 export type AddTodolistAT = {
@@ -20,8 +21,13 @@ type ChangeTodolistTitleAT = {
   todolistId: string
   title: string
 }
+type ChangeTodolistFilterMethodAT = {
+  type: TodolistsReducerActionTypes.CHANGE_TODOLIST_FILTER_METHOD
+  todolistId: string
+  newFilterMethod: FilterMethodType
+}
 
-type TodolistsAction = AddTodolistAT | RemoveTodolistAT | ChangeTodolistTitleAT;
+type TodolistsAction = AddTodolistAT | RemoveTodolistAT | ChangeTodolistTitleAT | ChangeTodolistFilterMethodAT;
 
 const initialState: TodolistsType = []
 
@@ -31,7 +37,7 @@ export const todolistsReducer = (state: TodolistsType = initialState, action: To
       const newTodolist: TodolistType = {
         id: action.newTodolistId,
         title: action.newTodolistTitle.trim(),
-        initialFilterMethod: "All"
+        filterMethod: "All"
       };
       return [...state, newTodolist];
     case TodolistsReducerActionTypes.REMOVE_TODOLIST:
@@ -39,6 +45,11 @@ export const todolistsReducer = (state: TodolistsType = initialState, action: To
     case TodolistsReducerActionTypes.CHANGE_TODOLIST_TITLE:
       return state.map(todolist =>
           todolist.id === action.todolistId ? {...todolist, title: action.title} : todolist);
+    case TodolistsReducerActionTypes.CHANGE_TODOLIST_FILTER_METHOD:
+      return state.map(todolist => todolist.id === action.todolistId
+          ? {...todolist, filterMethod: action.newFilterMethod}
+          : todolist
+      );
     default: return state;
   }
 }
@@ -51,4 +62,8 @@ export const removeTodolistAC = (todolistId: string): RemoveTodolistAT => {
 }
 export const changeTodolistTitleAC = (todolistId: string, title: string): ChangeTodolistTitleAT => {
   return {type: TodolistsReducerActionTypes.CHANGE_TODOLIST_TITLE, todolistId, title}
+}
+export const changeTodolistFilterMethodAC =
+    (todolistId: string, newFilterMethod: FilterMethodType): ChangeTodolistFilterMethodAT => {
+  return {type: TodolistsReducerActionTypes.CHANGE_TODOLIST_FILTER_METHOD, todolistId, newFilterMethod}
 }
