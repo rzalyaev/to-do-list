@@ -23,7 +23,9 @@ type ChangeTodolistTitleAT = {
 
 type TodolistsAction = AddTodolistAT | RemoveTodolistAT | ChangeTodolistTitleAT;
 
-export const todolistsReducer = (state: TodolistsType, action: TodolistsAction): TodolistsType => {
+const initialState: TodolistsType = []
+
+export const todolistsReducer = (state: TodolistsType = initialState, action: TodolistsAction): TodolistsType => {
   switch (action.type) {
     case TodolistsReducerActionTypes.ADD_TODOLIST:
       const newTodolist: TodolistType = {

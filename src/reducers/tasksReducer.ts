@@ -40,7 +40,9 @@ export type TaskListAction =
     | ChangeTaskCompletionAT
     | ChangeTaskTitleAT;
 
-export const tasksReducer = (state: TaskListType, action: TaskListAction): TaskListType => {
+const initialState: TaskListType = {};
+
+export const tasksReducer = (state: TaskListType = initialState, action: TaskListAction): TaskListType => {
   switch (action.type) {
     case TodolistsReducerActionTypes.ADD_TODOLIST:
       return {...state, [action.newTodolistId]: []};
