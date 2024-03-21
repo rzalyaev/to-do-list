@@ -10,11 +10,9 @@ export const EditableSpan = ({initialTitle, handleOnBlur}: EditableSpanPropsType
   const [changeMode, setChangeMode] = useState<boolean>(false);
   const [currentTitle, setCurrentTitle] = useState<string>(initialTitle);
 
-  const handleChangeCurrentTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    setCurrentTitle(event.currentTarget.value)
-  };
-  const handleToggleChangeMode = () => setChangeMode(true);
-  const handleChangeTaskTitle = () => {
+  const changeCurrentTitle = (event: ChangeEvent<HTMLInputElement>) => setCurrentTitle(event.currentTarget.value);
+  const toggleChangeMode = () => setChangeMode(true);
+  const changeTaskTitle = () => {
     handleOnBlur(currentTitle);
     setChangeMode(false);
   }
@@ -25,8 +23,8 @@ export const EditableSpan = ({initialTitle, handleOnBlur}: EditableSpanPropsType
                    variant="outlined"
                    size={'small'}
                    value={currentTitle}
-                   onChange={handleChangeCurrentTitle}
-                   onBlur={handleChangeTaskTitle}
+                   onChange={changeCurrentTitle}
+                   onBlur={changeTaskTitle}
                    autoFocus={true}
                    sx={{flexGrow: 1}}
         />
@@ -34,8 +32,9 @@ export const EditableSpan = ({initialTitle, handleOnBlur}: EditableSpanPropsType
   } else {
     return (
         <Typography variant={'h6'}
-                    onDoubleClick={handleToggleChangeMode}
-                    sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}>
+                    onDoubleClick={toggleChangeMode}
+                    sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}
+        >
           {initialTitle}
         </Typography>
     )
