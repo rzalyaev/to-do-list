@@ -15,16 +15,17 @@ type TodolistType = {
   dispatch: Dispatch<UnknownAction>
   filterMethod: FilterMethodType
   date?: string
-  handleRemoveTodolist: () => void
-  handleChangeTodolistTitle: (title: string) => void
-  handleChangeTodolistFilterMethod: (newFilterMethod: FilterMethodType) => void
+  removeTodolist: (todolistId: string) => void
+  changeTodolistTitle: (todolistId: string, title: string) => void
+  changeTodolistFilterMethod: (todolistId: string, newFilterMethod: FilterMethodType) => void
 }
 
-export const Todolist = ({
-                           id, title, taskList, dispatch, filterMethod,
-                           handleRemoveTodolist, handleChangeTodolistTitle, handleChangeTodolistFilterMethod
-                         }: TodolistType) => {
-  const addTask = (todolistId: string, newTaskTitle: string) => {
+export const Todolist = memo(({
+                                id, title, taskList, dispatch, filterMethod,
+                                removeTodolist, changeTodolistTitle, changeTodolistFilterMethod
+                              }: TodolistType) => {
+  console.log(`Todolist called (${title})`);
+  const addTask = useCallback((todolistId: string, newTaskTitle: string) => {
     dispatch(addTaskAC(todolistId, newTaskTitle));
   }
   const removeTask = (todolistId: string, taskId: string) => {
