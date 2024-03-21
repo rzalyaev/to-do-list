@@ -41,7 +41,7 @@ function App() {
   const dispatch = useDispatch();
 
   // Error checking ----------------------------------------------------------------------------------------------------
-  const isNewTodolistTitleValid = (newTodolistTitle: string) => {
+  const validateNewTodolistTitle = (newTodolistTitle: string) => {
     if (newTodolistTitle.trim().length > 0) {
       return true;
     } else {
@@ -52,7 +52,7 @@ function App() {
 
   // CRUD operations ---------------------------------------------------------------------------------------------------
   const addTodolistByClickOnButton = (newTodolistTitle: string) => {
-    if (isNewTodolistTitleValid(newTodolistTitle)) {
+    if (validateNewTodolistTitle(newTodolistTitle)) {
       dispatch(addTodolistAC(v1(), newTodolistTitle));
       setCurrentTodolistTitle('');
     }
