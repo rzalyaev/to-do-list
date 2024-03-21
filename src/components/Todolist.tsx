@@ -46,7 +46,7 @@ export const Todolist = memo(({
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
   const [error, setError] = useState('');
-  const isNewTaskTitleValid = (newTaskTitle: string) => {
+  const validateNewTaskTitle = (newTaskTitle: string) => {
     if (newTaskTitle.trim().length > 0) {
       return true;
     } else {
