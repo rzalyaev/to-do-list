@@ -11,8 +11,7 @@ type AddItemFormPropsType = InputPropsType & ButtonPropsType & {
 }
 
 export const AddItemForm = memo(({
-                              value, onChangeHandler, onKeyUpHandler, placeholder, inputClassName,
-                              title, onClickHandler,  errorStatus, buttonClassName,
+                              value, onChangeHandler, onKeyUpHandler, placeholder, onClickHandler,  errorStatus,
                               className
 }: AddItemFormPropsType) => {
   const addItemFormClassName: string = `${styles.addItemForm} ${className ? className : ''}`
