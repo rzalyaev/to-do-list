@@ -117,7 +117,7 @@ export const Todolist = memo(({
                      className={styles.addTaskForm}
         />
         <ul className={styles.taskList}>
-          {tasksList.length > 0 ? tasksList : "There is no task"}
+          {finalTaskList.length > 0 ? finalTaskList : "There is no task"}
         </ul>
         <div className={styles.filterButtons}>
           <Button variant={filterMethod === 'All' ? 'contained' : 'outlined'}
@@ -138,4 +138,4 @@ export const Todolist = memo(({
         </div>
       </div>
   );
-};
+});
