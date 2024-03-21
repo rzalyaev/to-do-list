@@ -3,7 +3,7 @@ import styles from './Todolist.module.css';
 import {FilterMethodType, TaskListType} from "../App";
 import {AddItemForm} from "./AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan/EditableSpan";
-import {Button, Checkbox, IconButton} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {addTaskAC, changeTaskCompletionAC, changeTaskTitleAC, removeTaskAC} from "../reducers/tasksReducer";
 import {Dispatch, UnknownAction} from "redux";
