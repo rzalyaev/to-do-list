@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
 import './App.css';
 import {Todolist} from "./components/Todolist";
 import {v1} from "uuid";
@@ -48,46 +48,42 @@ function App() {
       setErrorStatus('Title is required');
       return false;
     }
-  }
+  };
 
   // CRUD operations ---------------------------------------------------------------------------------------------------
-  const addTodolistByClickOnButton = (newTodolistTitle: string) => {
+  const addTodolistByClickOnButton = useCallback((newTodolistTitle: string) => {
     if (validateNewTodolistTitle(newTodolistTitle)) {
       dispatch(addTodolistAC(v1(), newTodolistTitle));
       setCurrentTodolistTitle('');
     }
-  }
-  const addTodolistByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+  }, []);
+  const addTodolistByPressEnter = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       addTodolistByClickOnButton(currentTodolistTitle);
     }
-  }
-  const removeTodolist = (todolistId: string) => {
+  }, [currentTodolistTitle]);
+  const removeTodolist = useCallback((todolistId: string) => {
     dispatch(removeTodolistAC(todolistId));
-  }
-  const changeTodolistTitle = (todolistId: string, title: string) => {
+  }, []);
+  const changeTodolistTitle = useCallback((todolistId: string, title: string) => {
     dispatch(changeTodolistTitleAC(todolistId, title));
-  }
-  const changeTodolistFilterMethod = (todolistId: string, newFilterMethod: FilterMethodType) => {
+  }, []);
+  const changeTodolistFilterMethod = useCallback((todolistId: string, newFilterMethod: FilterMethodType) => {
     dispatch(changeTodolistFilterMethodAC(todolistId, newFilterMethod));
-  }
+  }, []);
 
   // Event handlers ----------------------------------------------------------------------------------------------------
-  const handleInputOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputOnChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget.value.trim().length > 0) {
       setErrorStatus('');
     }
     setCurrentTodolistTitle(event.currentTarget.value);
-  }
-  const handleInputOnKeyUp = (event: KeyboardEvent<HTMLInputElement>) => addTodolistByPressEnter(event);
-  const handleButtonOnClick = () => addTodolistByClickOnButton(currentTodolistTitle);
+  }, []);
+  const handleInputOnKeyUp = useCallback((event: KeyboardEvent<HTMLInputElement>) => addTodolistByPressEnter(event), []);
+  const handleButtonOnClick = useCallback(() => addTodolistByClickOnButton(currentTodolistTitle), [currentTodolistTitle]);
 
   // To-do Lists mapping -----------------------------------------------------------------------------------------------
   const mappedTodolists = todolists.map(t => {
-    const handleRemoveTodolist = () => removeTodolist(t.id);
-    const handleChangeTodolistTitle = (title: string) => changeTodolistTitle(t.id, title);
-    const handleChangeTodolistFilterMethod = (newFilterMethod: FilterMethodType) =>
-        changeTodolistFilterMethod(t.id, newFilterMethod);
     return (
         <Todolist
             id={t.id}
@@ -95,9 +91,9 @@ function App() {
             taskList={taskList}
             dispatch={dispatch}
             filterMethod={t.filterMethod}
-            handleRemoveTodolist={handleRemoveTodolist}
-            handleChangeTodolistTitle={handleChangeTodolistTitle}
-            handleChangeTodolistFilterMethod={handleChangeTodolistFilterMethod}
+            removeTodolist={removeTodolist}
+            changeTodolistTitle={changeTodolistTitle}
+            changeTodolistFilterMethod={changeTodolistFilterMethod}
         />
     );
   })
