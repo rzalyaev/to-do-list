@@ -101,8 +101,8 @@ export const Todolist = memo(({
   return (
       <div className={styles.wrapper}>
         <div className={styles.todolistHeader}>
-          <EditableSpan initialTitle={title} handleOnBlur={handleChangeTodolistTitle}/>
           <IconButton aria-label="delete" onClick={handleRemoveTodolist}>
+          <EditableSpan initialTitle={title} handleOnBlur={handleOnBlur}/>
             <DeleteIcon/>
           </IconButton>
         </div>
