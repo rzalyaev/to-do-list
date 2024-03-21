@@ -7,6 +7,7 @@ import {Button, Checkbox, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {addTaskAC, changeTaskCompletionAC, changeTaskTitleAC, removeTaskAC} from "../reducers/tasksReducer";
 import {Dispatch, UnknownAction} from "redux";
+import {Task} from "./Task/Task";
 
 type TodolistType = {
   id: string
