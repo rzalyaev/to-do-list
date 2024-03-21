@@ -27,30 +27,21 @@ export const Todolist = memo(({
   console.log(`Todolist called (${title})`);
   const addTask = useCallback((todolistId: string, newTaskTitle: string) => {
     dispatch(addTaskAC(todolistId, newTaskTitle));
-  }
-  const removeTask = (todolistId: string, taskId: string) => {
+  }, []);
+  const removeTask = useCallback((todolistId: string, taskId: string) => {
     dispatch(removeTaskAC(todolistId, taskId));
-  }
-  const changeTaskCompletion = (todolistId: string, taskId: string, isDone: boolean) => {
+  }, []);
+  const changeTaskCompletion = useCallback((todolistId: string, taskId: string, isDone: boolean) => {
     dispatch(changeTaskCompletionAC(todolistId, taskId, isDone));
-  }
-  const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
+  }, []);
+  const changeTaskTitle = useCallback((todolistId: string, taskId: string, title: string) => {
     dispatch(changeTaskTitleAC(todolistId, taskId, title));
-  }
+  }, []);
 
   // Filtration --------------------------------------------------------------------------------------------------------
-  const filterTasks = (filterMethod: FilterMethodType) => {
-    if (filterMethod === 'Active') {
-      return taskList[id].filter(task => !task.isDone);
-    }
-    if (filterMethod === 'Completed') {
-      return taskList[id].filter(task => task.isDone);
-    }
-    return taskList[id];
-  }
-  const changeFilterMethodToAll = () => handleChangeTodolistFilterMethod('All');
-  const changeFilterMethodToActive = () => handleChangeTodolistFilterMethod('Active');
-  const changeFilterMethodToCompleted = () => handleChangeTodolistFilterMethod('Completed');
+  const changeFilterMethodToAll = useCallback(() => changeTodolistFilterMethod(id, 'All'), [id]);
+  const changeFilterMethodToActive = useCallback(() => changeTodolistFilterMethod(id, 'Active'), [id]);
+  const changeFilterMethodToCompleted = useCallback(() => changeTodolistFilterMethod(id, 'Completed'), [id]);
 
   // Add task form -----------------------------------------------------------------------------------------------------
   const [taskToAddTitle, setTaskToAddTitle] = useState<string>('');
@@ -62,24 +53,27 @@ export const Todolist = memo(({
       setError('Title is required');
       return false;
     }
-  }
-  const changeTaskToAddTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.value.trim().length > 0) {
+  };
+  const changeTaskToAddTitle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.value.trim().length > 0 && error !== '') {
       setError('');
     }
     setTaskToAddTitle(event.currentTarget.value);
-  }
-  const addTaskByClickOnButton = () => {
-    if (isNewTaskTitleValid(taskToAddTitle)) {
+  }, []);
+  const addTaskByClickOnButton = useCallback(() => {
+    if (validateNewTaskTitle(taskToAddTitle)) {
       addTask(id, taskToAddTitle.trim());
       setTaskToAddTitle('');
     }
-  }
-  const addTaskByPressEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+  }, [id, taskToAddTitle]);
+  const addTaskByPressEnter = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       addTaskByClickOnButton();
     }
-  }
+  }, []);
+
+  // Event handlers ----------------------------------------------------------------------------------------------------
+  const handleOnBlur = useCallback((title: string) => changeTodolistTitle(id, title), [id]);
 
   // Task list mapping -------------------------------------------------------------------------------------------------
   const tasksList = filterTasks(filterMethod).map(task => {
