@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import styles from './AddItemForm.module.css';
 import {InputPropsType} from "../Input/Input";
 import {ButtonPropsType} from "../Button/Button";
@@ -10,7 +10,7 @@ type AddItemFormPropsType = InputPropsType & ButtonPropsType & {
   className?: string
 }
 
-export const AddItemForm = ({
+export const AddItemForm = memo(({
                               value, onChangeHandler, onKeyUpHandler, placeholder, inputClassName,
                               title, onClickHandler,  errorStatus, buttonClassName,
                               className
@@ -35,4 +35,4 @@ export const AddItemForm = ({
         <div className={styles.error}>{errorStatus}</div>
       </div>
   );
-};
+});
