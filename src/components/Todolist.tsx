@@ -76,25 +76,27 @@ export const Todolist = memo(({
   const handleOnBlur = useCallback((title: string) => changeTodolistTitle(id, title), [id]);
 
   // Task list mapping -------------------------------------------------------------------------------------------------
-  const tasksList = filterTasks(filterMethod).map(task => {
-    const handleChangeTaskCompletion = (event: ChangeEvent<HTMLInputElement>) => {
-      changeTaskCompletion(id, task.id, event.currentTarget.checked);
-    }
-    const handleRemoveTask = () => removeTask(id, task.id);
-    const handleChangeTaskTitle = (title: string) => changeTaskTitle(id, task.id, title);
-    const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
-    return (
-        <li key={task.id} className={taskClassName}>
-          <Checkbox checked={task.isDone} onChange={handleChangeTaskCompletion}/>
-          <div className={styles.taskBody}>
-            <EditableSpan initialTitle={task.title} handleOnBlur={handleChangeTaskTitle}/>
-            <IconButton aria-label="delete" onClick={handleRemoveTask} size={'small'}>
-              <DeleteIcon/>
-            </IconButton>
-          </div>
-        </li>
-    )
-  })
+  const finalTaskList = useMemo(() => {
+    return taskList[id]
+        .filter(task => filterMethod === 'All'
+            ? task
+            : filterMethod === 'Active'
+                ? !task.isDone
+                : task.isDone)
+        .map(task => {
+          const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
+          return (
+              <Task key={task.id}
+                    className={taskClassName}
+                    task={task}
+                    todolistId={id}
+                    changeTaskCompletion={changeTaskCompletion}
+                    removeTask={removeTask}
+                    changeTaskTitle={changeTaskTitle}
+              />
+          )
+        });
+  }, [taskList, filterMethod]);
 
   return (
       <div className={styles.wrapper}>
