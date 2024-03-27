@@ -13,21 +13,6 @@
     margin-bottom: 5px;
 }
 
-.todolistHeader:hover {
-    .removeTodolistButton {
-        opacity: 1;
-    }
-}
-
-.removeTodolistButton {
-    opacity: 0.1;
-}
-
-.removeTodolistButton {
-    align-self: flex-end;
-    height: max-content;
-}
-
 .addTaskForm {
     display: flex;
     justify-content: space-between;
