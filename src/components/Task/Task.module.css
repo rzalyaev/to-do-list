@@ -1,0 +1,33 @@
+.task {
+    border-radius: 3px;
+    display: flex;
+    gap: 5px;
+    max-width: 220px;
+}
+
+.task:hover {
+    background-color: #00c4ff;
+}
+
+.isDone {
+    opacity: 0.5;
+}
+
+.checkbox {
+    margin: 0 auto;
+    position: relative;
+    top: 1px;
+}
+
+.taskBody {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+}
+
+.taskTitle {
+    width: 100%;
+    overflow: auto;
+}
