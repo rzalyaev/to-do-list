@@ -39,50 +39,6 @@
     list-style-type: none;
 }
 
-.task {
-    border-radius: 3px;
-    display: flex;
-    gap: 5px;
-}
-
-.task:hover {
-    background-color: #00c4ff;
-}
-
-.isDone {
-    opacity: 0.5;
-}
-
-.checkbox {
-    margin: 0 auto;
-    position: relative;
-    top: 1px;
-}
-
-.taskBody {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    cursor: pointer;
-}
-
-.taskTitle {
-    width: 100%;
-    overflow: auto;
-}
-
-.deleteTaskButton {
-    opacity: 0;
-    cursor: pointer;
-}
-
-.task:hover, .taskBody:hover, .taskBody:focus {
-    .deleteTaskButton {
-        opacity: 1;
-    }
-}
-
 .filterButtons {
     margin: 5px 0 0 0;
     display: flex;
