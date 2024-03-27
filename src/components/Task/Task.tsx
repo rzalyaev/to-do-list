@@ -1,12 +1,12 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {Checkbox, IconButton} from "@mui/material";
-import styles from "../Todolist.module.css";
+import styles from "./Task.module.css";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {TaskType} from "../../App";
 
 type TaskPropsType = {
-  className: string,
+  className?: string,
   task: TaskType
   todolistId: string
   changeTaskCompletion: (todolistId: string, taskId: string, isDone: boolean) => void
@@ -27,7 +27,7 @@ export const Task = ({
     removeTask(todolistId, task.id)
   }, []);
   return (
-      <li className={className}>
+      <li className={styles.task}>
         <Checkbox checked={task.isDone} onChange={handleChangeTaskCompletion}/>
         <div className={styles.taskBody}>
           <EditableSpan initialTitle={task.title} handleOnBlur={handleChangeTaskTitle}/>
