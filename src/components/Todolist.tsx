@@ -85,7 +85,6 @@ export const Todolist = memo(({
                 ? !task.isDone
                 : task.isDone)
         .map(task => {
-          const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
           return (
               <Task key={task.id}
                     task={task}
