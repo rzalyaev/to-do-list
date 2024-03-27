@@ -88,7 +88,6 @@ export const Todolist = memo(({
           const taskClassName: string = `${styles.task} ${task.isDone ? styles.isDone : ''}`;
           return (
               <Task key={task.id}
-                    className={taskClassName}
                     task={task}
                     todolistId={id}
                     changeTaskCompletion={changeTaskCompletion}
