@@ -1,0 +1,24 @@
+.toDoListHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskList {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.taskListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deleteButton {
+    padding: 3px 5px;
+    height: min-content;
+}
