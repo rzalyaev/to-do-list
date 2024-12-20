@@ -14,3 +14,11 @@ input {
 .buttons-container > button {
   margin-right: 10px;
 }
+
+.error {
+  border: red 1px solid;
+}
+
+.error-message {
+  color: red;
+}

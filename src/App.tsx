@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import './App.css';
 import {ToDoList} from "./components/ToDoList";
+import {v1} from "uuid";
 
 export type Task = {
-    id: number;
+    id: string;
     title: string;
     isDone: boolean;
 }
@@ -13,18 +14,23 @@ export type filterMethodType = 'all' | 'active' | 'completed';
 
 function App() {
     const initialTasks: TaskList = [
-        { id: 1, title: 'HTML&CSS', isDone: true },
-        { id: 2, title: 'JS', isDone: true },
-        { id: 3, title: 'ReactJS', isDone: false },
-        { id: 4, title: 'Redux', isDone: false },
-        { id: 5, title: 'Typescript', isDone: false },
-        { id: 6, title: 'RTK query', isDone: false },
+        { id: v1(), title: 'HTML&CSS', isDone: true },
+        { id: v1(), title: 'JS', isDone: true },
+        { id: v1(), title: 'ReactJS', isDone: false },
+        { id: v1(), title: 'Redux', isDone: false },
+        { id: v1(), title: 'Typescript', isDone: false },
+        { id: v1(), title: 'RTK query', isDone: false },
     ];
 
     const [tasks, setTasks] = useState<TaskList>(initialTasks);
     const [filterMethod, setFilterMethod] = useState<filterMethodType>('all');
+    const [error, setError] = useState<string | null>(null);
 
-    const deleteTask = (id: number) => setTasks(tasks.filter(task => task.id !== id));
+    const addTask = (title: string) => {
+        const newTask = {id: v1(), title, isDone: false};
+        setTasks([...tasks, newTask]);
+    }
+    const deleteTask = (id: string) => setTasks(tasks.filter(task => task.id !== id));
     const changeFilterMethod = (reqFilterMethod: filterMethodType) => setFilterMethod(reqFilterMethod);
 
     const filterTasks = (): TaskList => {
@@ -35,12 +41,23 @@ function App() {
         }
     }
 
+    const changeTaskCompletion = (id: string, isDone: boolean) => setTasks(tasks.map(task => {
+        return task.id === id ? {...task, isDone} : task;
+    }))
+
+    const createError = (newError: string) => setError(newError);
+
     return (
         <div className="App">
             <ToDoList title={'What to learn'}
                       tasks={filterTasks()}
+                      addTask={addTask}
                       deleteTask={deleteTask}
+                      filterMethod={filterMethod}
                       changeFilterMethod={changeFilterMethod}
+                      changeTaskCompletion={changeTaskCompletion}
+                      error={error}
+                      createError={createError}
                       date={'30.01.2024'}
             />
         </div>
