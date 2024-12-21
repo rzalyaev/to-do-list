@@ -18,6 +18,10 @@
     align-items: center;
 }
 
+.inactive {
+    opacity: 0.5;
+}
+
 .deleteButton {
     padding: 3px 5px;
     height: min-content;

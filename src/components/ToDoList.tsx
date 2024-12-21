@@ -35,8 +35,9 @@ export const ToDoList = ({
             const newTaskCompletionValue = e.currentTarget.checked;
             changeTaskCompletion(id, newTaskCompletionValue);
         }
+        const itemClassName = styles.taskListItem + (isDone ? (' ' + styles.inactive) : '');
         return (
-            <li key={id} className={styles.taskListItem}>
+            <li key={id} className={itemClassName}>
                 <div>
                     <input type="checkbox" checked={isDone} onChange={handleTaskCompletion}/>
                     <span>{title}</span>
