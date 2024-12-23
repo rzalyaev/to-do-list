@@ -5,8 +5,8 @@ import {Button} from "../Button/Button";
 
 type AddItemFormProps = {
     addItem: (itemText: string) => void
-    error?: string | null
-    createError: (newError: string) => void
+    error: string
+    createError: (error: string) => void
 }
 
 export const AddItemForm = ({addItem, error, createError}: AddItemFormProps) => {

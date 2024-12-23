@@ -1,46 +1,50 @@
 import React, {ChangeEvent} from 'react';
 import styles from './ToDoList.module.css';
-import {filterMethodType, Task, TaskList} from "../App";
+import {filterMethodType, Task} from "../App";
 import {Button} from "./Button/Button";
 import {AddItemForm} from "./AddItemForm/AddItemForm";
 
 type Props = {
+    id: string
     title: string
-    tasks: TaskList
-    addTask: (newTaskTitle: string) => void
-    deleteTask: (id: string) => void
+    tasks: Task[]
+    addTask: (toDoListId: string, title: string) => void
+    deleteTask: (toDoListId: string, id: string) => void
     filterMethod: filterMethodType
-    changeFilterMethod: (reqFilterMethod: filterMethodType) => void
-    changeTaskCompletion: (id: string, newTaskCompletionValue: boolean) => void
-    error?: string | null
-    createError: (newError: string) => void
+    filterTasks: (tasks: Task[], filterMethod: filterMethodType) => Task[]
+    changeFilterMethod: (toDoListId: string, filterMethod: filterMethodType) => void
+    changeTaskCompletion: (toDoListId: string, taskId: string, newTaskCompletionValue: boolean) => void
+    error: string
+    createError: (toDoListId: string, error: string) => void
     date?: string
 }
 
 export const ToDoList = ({
+                             id,
                              title,
                              tasks,
                              addTask,
                              deleteTask,
                              filterMethod,
+                             filterTasks,
                              changeFilterMethod,
                              changeTaskCompletion,
                              error,
                              createError,
                              date
                          }: Props) => {
-    const mappedTasks = tasks.map(({id, title, isDone}: Task) => {
-        const handleTaskDeletion = () => deleteTask(id);
+    const mappedTasks = filterTasks(tasks, filterMethod).map(task => {
+        const handleTaskDeletion = () => deleteTask(id, task.id);
         const handleTaskCompletion = (e: ChangeEvent<HTMLInputElement>) => {
             const newTaskCompletionValue = e.currentTarget.checked;
-            changeTaskCompletion(id, newTaskCompletionValue);
+            changeTaskCompletion(id, task.id, newTaskCompletionValue);
         }
-        const itemClassName = styles.taskListItem + (isDone ? (' ' + styles.inactive) : '');
+        const itemClassName = styles.taskListItem + (task.isDone ? (' ' + styles.inactive) : '');
         return (
             <li key={id} className={itemClassName}>
                 <div>
-                    <input type="checkbox" checked={isDone} onChange={handleTaskCompletion}/>
-                    <span>{title}</span>
+                    <input type="checkbox" checked={task.isDone} onChange={handleTaskCompletion}/>
+                    <span>{task.title}</span>
                 </div>
                 <Button title={'x'}
                         onClick={handleTaskDeletion}
@@ -50,9 +54,9 @@ export const ToDoList = ({
         )
     });
 
-    const showAllTasks = () => changeFilterMethod('all');
-    const showActiveTasks = () => changeFilterMethod('active');
-    const showCompletedTasks = () => changeFilterMethod('completed');
+    const showAllTasks = () => changeFilterMethod(id,'all');
+    const showActiveTasks = () => changeFilterMethod(id, 'active');
+    const showCompletedTasks = () => changeFilterMethod(id, 'completed');
 
     const allFilterButtonClassName = filterMethod === 'all'
         ? styles.filterButton + ' ' + styles.activeFilterButton
@@ -64,10 +68,13 @@ export const ToDoList = ({
         ? styles.filterButton + ' ' + styles.activeFilterButton
         : styles.filterButton;
 
+    const addTaskCallback = (newTaskTitle: string) => addTask(id, newTaskTitle);
+    const createErrorCallback = (newErrorText: string) => createError(id, newErrorText);
+
     return (
         <div>
             <h3 className={styles.toDoListHeader}>{title}</h3>
-            <AddItemForm addItem={addTask} error={error} createError={createError}/>
+            <AddItemForm addItem={addTaskCallback} error={error} createError={createErrorCallback}/>
             {
                 mappedTasks.length === 0
                     ? <p>There are no tasks yet.</p>
