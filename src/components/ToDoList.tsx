@@ -7,14 +7,14 @@ import {AddItemForm} from "./AddItemForm/AddItemForm";
 type Props = {
     id: string
     title: string
+    error: string
+    filterMethod: filterMethodType
     tasks: Task[]
     addTask: (toDoListId: string, title: string) => void
     deleteTask: (toDoListId: string, id: string) => void
-    filterMethod: filterMethodType
     filterTasks: (tasks: Task[], filterMethod: filterMethodType) => Task[]
     changeFilterMethod: (toDoListId: string, filterMethod: filterMethodType) => void
     changeTaskCompletion: (toDoListId: string, taskId: string, newTaskCompletionValue: boolean) => void
-    error: string
     createError: (toDoListId: string, error: string) => void
     date?: string
 }
@@ -22,24 +22,23 @@ type Props = {
 export const ToDoList = ({
                              id,
                              title,
+                             filterMethod,
+                             error,
                              tasks,
                              addTask,
                              deleteTask,
-                             filterMethod,
                              filterTasks,
                              changeFilterMethod,
                              changeTaskCompletion,
-                             error,
                              createError,
                              date
                          }: Props) => {
     const mappedTasks = filterTasks(tasks, filterMethod).map(task => {
         const handleTaskDeletion = () => deleteTask(id, task.id);
         const handleTaskCompletion = (e: ChangeEvent<HTMLInputElement>) => {
-            const newTaskCompletionValue = e.currentTarget.checked;
-            changeTaskCompletion(id, task.id, newTaskCompletionValue);
+            changeTaskCompletion(id, task.id, e.currentTarget.checked);
         }
-        const itemClassName = styles.taskListItem + (task.isDone ? (' ' + styles.inactive) : '');
+        const itemClassName = `${styles.taskListItem} ${task.isDone ? styles.inactive : ''}`;
         return (
             <li key={id} className={itemClassName}>
                 <div>

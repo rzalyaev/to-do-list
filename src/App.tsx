@@ -46,9 +46,11 @@ function App() {
         const newTask = {id: v1(), title, isDone: false};
         setTasks({...tasks, [toDoListId]: [newTask, ...tasks[toDoListId]]});
     };
+
     const deleteTask = (toDoListId: string, taskId: string) => {
         setTasks({...tasks, [toDoListId]: tasks[toDoListId].filter(task => task.id !== taskId)});
     };
+
     const changeFilterMethod = (toDoListId: string, filterMethod: filterMethodType) => {
         setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, filterMethod} : tdl));
     };
@@ -66,24 +68,25 @@ function App() {
             ...tasks,
             [toDoListId]: tasks[toDoListId].map(task => task.id === taskId ? {...task, isDone} : task),
         })
-    }
+    };
 
     const createError = (toDoListId: string, error: string) => {
         setToDoLists(toDoLists.map(tdl => toDoListId === tdl.id ? {...tdl, error} : tdl));
-    }
+    };
 
     const mappedToDoLists = toDoLists.map(tdl => {
         return (
-            <ToDoList id={tdl.id}
+            <ToDoList key={tdl.id}
+                      id={tdl.id}
                       title={tdl.title}
+                      error={tdl.error}
+                      filterMethod={tdl.filterMethod}
                       tasks={tasks[tdl.id]}
                       addTask={addTask}
                       deleteTask={deleteTask}
-                      filterMethod={tdl.filterMethod}
                       filterTasks={filterTasks}
                       changeFilterMethod={changeFilterMethod}
                       changeTaskCompletion={changeTaskCompletion}
-                      error={tdl.error}
                       createError={createError}
                       date={'30.01.2024'}
             />
