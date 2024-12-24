@@ -11,11 +11,12 @@ type Props = {
     filterMethod: filterMethodType
     tasks: Task[]
     addTask: (toDoListId: string, title: string) => void
-    deleteTask: (toDoListId: string, id: string) => void
+    deleteTask: (toDoListId: string, taskId: string) => void
     filterTasks: (tasks: Task[], filterMethod: filterMethodType) => Task[]
     changeFilterMethod: (toDoListId: string, filterMethod: filterMethodType) => void
     changeTaskCompletion: (toDoListId: string, taskId: string, newTaskCompletionValue: boolean) => void
     createError: (toDoListId: string, error: string) => void
+    deleteToDoList: (toDoListId: string) => void
     date?: string
 }
 
@@ -31,6 +32,7 @@ export const ToDoList = ({
                              changeFilterMethod,
                              changeTaskCompletion,
                              createError,
+                             deleteToDoList,
                              date
                          }: Props) => {
     const mappedTasks = filterTasks(tasks, filterMethod).map(task => {
@@ -53,7 +55,7 @@ export const ToDoList = ({
         )
     });
 
-    const showAllTasks = () => changeFilterMethod(id,'all');
+    const showAllTasks = () => changeFilterMethod(id, 'all');
     const showActiveTasks = () => changeFilterMethod(id, 'active');
     const showCompletedTasks = () => changeFilterMethod(id, 'completed');
 
@@ -69,17 +71,21 @@ export const ToDoList = ({
 
     const addTaskCallback = (newTaskTitle: string) => addTask(id, newTaskTitle);
     const createErrorCallback = (newErrorText: string) => createError(id, newErrorText);
+    const deleteToDoListCallback = () => deleteToDoList(id);
 
     return (
         <div>
-            <h3 className={styles.toDoListHeader}>{title}</h3>
+            <div className={styles.toDoListHeader}>
+                <h3>{title}</h3>
+                <Button title={'X'} onClick={deleteToDoListCallback}/>
+            </div>
             <AddItemForm addItem={addTaskCallback} error={error} createError={createErrorCallback}/>
             {
                 mappedTasks.length === 0
                     ? <p>There are no tasks yet.</p>
                     : <ul className={styles.taskList}>{mappedTasks}</ul>
             }
-            <div className='buttons-container'>
+            <div className={styles.buttonsContainer}>
                 <Button title={'All'} onClick={showAllTasks} className={allFilterButtonClassName}/>
                 <Button title={'Active'} onClick={showActiveTasks} className={activeFilterButtonClassName}/>
                 <Button title={'Completed'} onClick={showCompletedTasks} className={completedFilterButtonClassName}/>

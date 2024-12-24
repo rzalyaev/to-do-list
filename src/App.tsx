@@ -74,6 +74,11 @@ function App() {
         setToDoLists(toDoLists.map(tdl => toDoListId === tdl.id ? {...tdl, error} : tdl));
     };
 
+    const deleteToDoList = (toDoListId: string) => {
+        setToDoLists(toDoLists.filter(tdl => tdl.id !== toDoListId));
+        delete tasks[toDoListId];
+    }
+
     const mappedToDoLists = toDoLists.map(tdl => {
         return (
             <ToDoList key={tdl.id}
@@ -88,6 +93,7 @@ function App() {
                       changeFilterMethod={changeFilterMethod}
                       changeTaskCompletion={changeTaskCompletion}
                       createError={createError}
+                      deleteToDoList={deleteToDoList}
                       date={'30.01.2024'}
             />
         )

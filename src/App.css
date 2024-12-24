@@ -11,10 +11,6 @@ input {
   margin-right: 10px;
 }
 
-.buttons-container > button {
-  margin-right: 10px;
-}
-
 .error {
   border: red 1px solid;
 }
