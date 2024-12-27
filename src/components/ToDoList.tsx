@@ -3,20 +3,21 @@ import styles from './ToDoList.module.css';
 import {filterMethodType, Task} from "../App";
 import {Button} from "./Button/Button";
 import {AddItemForm} from "./AddItemForm/AddItemForm";
+import {EditableSpan} from "./EditableSpan/EditableSpan";
 
 type Props = {
     id: string
     title: string
-    error: string
     filterMethod: filterMethodType
     tasks: Task[]
+    changeToDoListTitle: (toDoListId: string, title: string) => void
+    changeFilterMethod: (toDoListId: string, filterMethod: filterMethodType) => void
+    deleteToDoList: (toDoListId: string) => void
     addTask: (toDoListId: string, title: string) => void
     deleteTask: (toDoListId: string, taskId: string) => void
     filterTasks: (tasks: Task[], filterMethod: filterMethodType) => Task[]
-    changeFilterMethod: (toDoListId: string, filterMethod: filterMethodType) => void
+    changeTaskTitle: (toDoListId: string, taskId: string, title: string) => void
     changeTaskCompletion: (toDoListId: string, taskId: string, newTaskCompletionValue: boolean) => void
-    createError: (toDoListId: string, error: string) => void
-    deleteToDoList: (toDoListId: string) => void
     date?: string
 }
 
@@ -24,28 +25,29 @@ export const ToDoList = ({
                              id,
                              title,
                              filterMethod,
-                             error,
                              tasks,
+                             changeToDoListTitle,
+                             changeFilterMethod,
+                             deleteToDoList,
                              addTask,
                              deleteTask,
                              filterTasks,
-                             changeFilterMethod,
+                             changeTaskTitle,
                              changeTaskCompletion,
-                             createError,
-                             deleteToDoList,
                              date
                          }: Props) => {
     const mappedTasks = filterTasks(tasks, filterMethod).map(task => {
         const handleTaskDeletion = () => deleteTask(id, task.id);
+        const handleTaskTitleChange = (title: string) => changeTaskTitle(id, task.id, title);
         const handleTaskCompletion = (e: ChangeEvent<HTMLInputElement>) => {
             changeTaskCompletion(id, task.id, e.currentTarget.checked);
         }
         const itemClassName = `${styles.taskListItem} ${task.isDone ? styles.inactive : ''}`;
         return (
-            <li key={id} className={itemClassName}>
-                <div>
+            <li key={task.id} className={itemClassName}>
+                <div className={styles.taskBody}>
                     <input type="checkbox" checked={task.isDone} onChange={handleTaskCompletion}/>
-                    <span>{task.title}</span>
+                    <EditableSpan onChange={handleTaskTitleChange} className={styles.taskTitle}>{task.title}</EditableSpan>
                 </div>
                 <Button title={'x'}
                         onClick={handleTaskDeletion}
@@ -70,7 +72,6 @@ export const ToDoList = ({
         : styles.filterButton;
 
     const addTaskCallback = (newTaskTitle: string) => addTask(id, newTaskTitle);
-    const createErrorCallback = (newErrorText: string) => createError(id, newErrorText);
     const deleteToDoListCallback = () => deleteToDoList(id);
 
     return (
@@ -79,7 +80,7 @@ export const ToDoList = ({
                 <h3>{title}</h3>
                 <Button title={'X'} onClick={deleteToDoListCallback}/>
             </div>
-            <AddItemForm addItem={addTaskCallback} error={error} createError={createErrorCallback}/>
+            <AddItemForm addItem={addTaskCallback}/>
             {
                 mappedTasks.length === 0
                     ? <p>There are no tasks yet.</p>

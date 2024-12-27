@@ -1,6 +1,19 @@
 .container {
+    max-width: min-content;
 }
 
 .form {
-    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
 }

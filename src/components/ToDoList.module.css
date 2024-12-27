@@ -22,6 +22,20 @@
     opacity: 0.5;
 }
 
+.taskBody {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.taskBody > input {
+    margin-bottom: 1px;
+}
+
+.taskTitle {
+    max-width: 160px;
+}
+
 .deleteButton {
     padding: 3px 5px;
     height: min-content;

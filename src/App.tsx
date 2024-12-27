@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import './App.css';
 import {ToDoList} from "./components/ToDoList";
 import {v1} from "uuid";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 
 type ToDoList = {
     id: string
     title: string
     filterMethod: filterMethodType
-    error: string
 }
 
 export type Task = {
@@ -26,8 +26,8 @@ function App() {
     const toDoList2Id = v1();
 
     const [toDoLists, setToDoLists] = useState<ToDoList[]>([
-        {id: toDoList1Id, title: 'What to learn', filterMethod: 'all', error: ''},
-        {id: toDoList2Id, title: 'What to buy', filterMethod: 'all', error: ''},
+        {id: toDoList1Id, title: 'What to learn', filterMethod: 'all'},
+        {id: toDoList2Id, title: 'What to buy', filterMethod: 'all'},
     ]);
 
     const [tasks, setTasks] = useState<TaskList>({
@@ -42,6 +42,20 @@ function App() {
         [toDoList2Id]: []
     });
 
+    const addToDoList = (title: string) => {
+        const id = v1();
+        setToDoLists([{id, title, filterMethod: 'all'}, ...toDoLists]);
+        setTasks({...tasks, [id]: []});
+    };
+
+    const changeToDoListTitle = (toDoListId: string, title: string) => {
+        setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, title} : tdl));
+    }
+
+    const changeFilterMethod = (toDoListId: string, filterMethod: filterMethodType) => {
+        setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, filterMethod} : tdl));
+    };
+
     const addTask = (toDoListId: string, title: string) => {
         const newTask = {id: v1(), title, isDone: false};
         setTasks({...tasks, [toDoListId]: [newTask, ...tasks[toDoListId]]});
@@ -51,10 +65,6 @@ function App() {
         setTasks({...tasks, [toDoListId]: tasks[toDoListId].filter(task => task.id !== taskId)});
     };
 
-    const changeFilterMethod = (toDoListId: string, filterMethod: filterMethodType) => {
-        setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, filterMethod} : tdl));
-    };
-
     const filterTasks = (tasks: Task[], filterMethod: filterMethodType): Task[] => {
         switch (filterMethod) {
             case 'active': return tasks.filter(task => !task.isDone);
@@ -62,6 +72,13 @@ function App() {
             default: return tasks;
         }
     };
+
+    const changeTaskTitle = (toDoListId: string, taskId: string, title: string) => {
+        setTasks({
+            ...tasks,
+            [toDoListId]: tasks[toDoListId].map(task => task.id === taskId ? {...task, title} : task)
+        })
+    }
 
     const changeTaskCompletion = (toDoListId: string, taskId: string, isDone: boolean) => {
         setTasks({
@@ -84,16 +101,16 @@ function App() {
             <ToDoList key={tdl.id}
                       id={tdl.id}
                       title={tdl.title}
-                      error={tdl.error}
                       filterMethod={tdl.filterMethod}
                       tasks={tasks[tdl.id]}
+                      changeToDoListTitle={changeToDoListTitle}
+                      changeFilterMethod={changeFilterMethod}
+                      deleteToDoList={deleteToDoList}
                       addTask={addTask}
                       deleteTask={deleteTask}
                       filterTasks={filterTasks}
-                      changeFilterMethod={changeFilterMethod}
+                      changeTaskTitle={changeTaskTitle}
                       changeTaskCompletion={changeTaskCompletion}
-                      createError={createError}
-                      deleteToDoList={deleteToDoList}
                       date={'30.01.2024'}
             />
         )
@@ -101,7 +118,11 @@ function App() {
 
     return (
         <div className="App">
-            {mappedToDoLists}
+            <h1 className='creation-header'>Create To-Do list:</h1>
+            <AddItemForm addItem={addToDoList}/>
+            <div className="toDoLists-container">
+            {mappedToDoLists.length ? mappedToDoLists : <span>There are no to-do lists yet.</span>}
+            </div>
         </div>
     )
 }

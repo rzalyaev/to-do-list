@@ -1,16 +1,42 @@
-import React, {InputHTMLAttributes} from 'react';
+import React from 'react';
+import styles from './Input.module.css';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    error?: string;
+    className?: string;
 }
 
-export const Input = ({type, value, checked, onChange, onKeyUp}: InputProps) => {
+export const Input: React.FC<InputProps> = ({
+                                         type = 'text',
+                                         value,
+                                         onChange,
+                                         placeholder,
+                                         name,
+                                         id,
+                                         disabled = false,
+                                         readOnly = false,
+                                         required = false,
+                                         autoFocus = false,
+                                         error,
+                                         className,
+                                         ...props
+                                     }) => {
     return (
-        <input type={type}
-               value={value}
-               checked={checked}
-               onChange={onChange}
-               onKeyUp={onKeyUp}
-        />
+        <div className={`${styles.container} ${className}`}>
+            <input
+                type={type}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                name={name}
+                id={id}
+                disabled={disabled}
+                readOnly={readOnly}
+                required={required}
+                autoFocus={autoFocus}
+                {...props}
+            />
+            {error && <span className="error-message">{error}</span>}
+        </div>
     );
 };

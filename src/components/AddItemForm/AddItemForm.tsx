@@ -5,15 +5,14 @@ import {Button} from "../Button/Button";
 
 type AddItemFormProps = {
     addItem: (itemText: string) => void
-    error: string
-    createError: (error: string) => void
 }
 
-export const AddItemForm = ({addItem, error, createError}: AddItemFormProps) => {
+export const AddItemForm = ({addItem}: AddItemFormProps) => {
     const [currentInputText, setCurrentInputText] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
-        currentInputText.trim() && createError('');
+        currentInputText.trim() && setError(false);
     }, [currentInputText]);
 
     const handleInputText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +24,7 @@ export const AddItemForm = ({addItem, error, createError}: AddItemFormProps) => 
             addItem(currentInputText);
             setCurrentInputText('');
         } else {
-            createError('title is required');
+            setError(true);
         }
     }
 
@@ -40,12 +39,14 @@ export const AddItemForm = ({addItem, error, createError}: AddItemFormProps) => 
                        value={currentInputText}
                        onChange={handleInputText}
                        onKeyUp={handleKeyUp}
+                       className={styles.input}
                 />
                 <Button title={'+'}
                         onClick={handleAddItem}
+                        className={styles.button}
                 />
             </div>
-            {error ? <span className={'error'}>{error}</span> : ''}
+            {error ? <span className={'error'}>Invalid value!</span> : ''}
         </div>
     );
 };

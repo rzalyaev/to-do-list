@@ -1,14 +1,23 @@
 .App {
   padding: 30px;
   display: flex;
-}
-
-.App > div {
-  margin-right: 50px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 input {
   margin-right: 10px;
+}
+
+.creation-header {
+  margin: 0;
+  padding: 0;
+  width: max-content;
+}
+
+.toDoLists-container {
+  display: flex;
+  gap: 30px;
 }
 
 .error {
