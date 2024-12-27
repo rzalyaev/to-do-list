@@ -71,13 +71,14 @@ export const ToDoList = ({
         ? styles.filterButton + ' ' + styles.activeFilterButton
         : styles.filterButton;
 
-    const addTaskCallback = (newTaskTitle: string) => addTask(id, newTaskTitle);
+    const changeToDoListTitleCallback = (title: string) => changeToDoListTitle(id, title);
     const deleteToDoListCallback = () => deleteToDoList(id);
+    const addTaskCallback = (newTaskTitle: string) => addTask(id, newTaskTitle);
 
     return (
         <div>
             <div className={styles.toDoListHeader}>
-                <h3>{title}</h3>
+                <EditableSpan onChange={changeToDoListTitleCallback} className={styles.toDoListTitle}>{title}</EditableSpan>
                 <Button title={'X'} onClick={deleteToDoListCallback}/>
             </div>
             <AddItemForm addItem={addTaskCallback}/>

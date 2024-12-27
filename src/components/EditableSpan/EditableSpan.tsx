@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import styles from './EditableSpan.module.css';
 import {Input} from "../Input/Input";
 
@@ -16,12 +16,13 @@ export const EditableSpan = ({children, onChange, className}: EditableSpanProps)
         onChange(currentValue);
         setEditMode(false);
     }
+    const handleInputKeyDown = (e: KeyboardEvent) => e.key === 'Enter' && handleInputBlur();
     const handleSpanDoubleClick = () => setEditMode(true);
     return (
         <div className={`${styles.container} ${className}`}>
             {editMode
-                ? <Input value={currentValue} onChange={handleInputChange} onBlur={handleInputBlur} autoFocus={true}
-                         className={styles.input}/>
+                ? <Input value={currentValue} onChange={handleInputChange} onKeyDown={handleInputKeyDown}
+                         onBlur={handleInputBlur} autoFocus={true} className={styles.input}/>
                 : <span onDoubleClick={handleSpanDoubleClick}>{children}</span>
             }
         </div>
