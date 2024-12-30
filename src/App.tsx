@@ -1,116 +1,34 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
 import {ToDoList} from "./components/ToDoList";
-import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
-
-type ToDoList = {
-    id: string
-    title: string
-    filterMethod: filterMethodType
-}
-
-export type Task = {
-    id: string
-    title: string
-    isDone: boolean
-}
-export type TaskList = {
-    [key: string]: Task[]
-}
-
-export type filterMethodType = 'all' | 'active' | 'completed';
+import {
+    addToDoListAC,
+    toDoListReducerInitialState,
+    toDoListReducer,
+} from "./reducers/toDoListReducer";
+import {v1} from "uuid";
+import {taskReducer, taskReducerInitialState} from "./reducers/taskReducer";
 
 function App() {
-    const toDoList1Id = v1();
-    const toDoList2Id = v1();
-
-    const [toDoLists, setToDoLists] = useState<ToDoList[]>([
-        {id: toDoList1Id, title: 'What to learn', filterMethod: 'all'},
-        {id: toDoList2Id, title: 'What to buy', filterMethod: 'all'},
-    ]);
-
-    const [tasks, setTasks] = useState<TaskList>({
-        [toDoList1Id]: [
-            { id: v1(), title: 'HTML&CSS', isDone: true },
-            { id: v1(), title: 'JS', isDone: true },
-            { id: v1(), title: 'ReactJS', isDone: false },
-            { id: v1(), title: 'Redux', isDone: false },
-            { id: v1(), title: 'Typescript', isDone: false },
-            { id: v1(), title: 'RTK query', isDone: false },
-        ],
-        [toDoList2Id]: []
-    });
+    const [toDoListReducerState, toDoListReducerDispatch] = useReducer(toDoListReducer, toDoListReducerInitialState);
+    const [taskReducerState, taskReducerDispatch] = useReducer(taskReducer, taskReducerInitialState);
 
     const addToDoList = (title: string) => {
-        const id = v1();
-        setToDoLists([{id, title, filterMethod: 'all'}, ...toDoLists]);
-        setTasks({...tasks, [id]: []});
+        const action = addToDoListAC(v1(), title);
+        toDoListReducerDispatch(action);
+        taskReducerDispatch(action);
     };
 
-    const changeToDoListTitle = (toDoListId: string, title: string) => {
-        setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, title} : tdl));
-    }
-
-    const changeFilterMethod = (toDoListId: string, filterMethod: filterMethodType) => {
-        setToDoLists(toDoLists.map(tdl => tdl.id === toDoListId ? {...tdl, filterMethod} : tdl));
-    };
-
-    const addTask = (toDoListId: string, title: string) => {
-        const newTask = {id: v1(), title, isDone: false};
-        setTasks({...tasks, [toDoListId]: [newTask, ...tasks[toDoListId]]});
-    };
-
-    const deleteTask = (toDoListId: string, taskId: string) => {
-        setTasks({...tasks, [toDoListId]: tasks[toDoListId].filter(task => task.id !== taskId)});
-    };
-
-    const filterTasks = (tasks: Task[], filterMethod: filterMethodType): Task[] => {
-        switch (filterMethod) {
-            case 'active': return tasks.filter(task => !task.isDone);
-            case 'completed': return tasks.filter(task => task.isDone);
-            default: return tasks;
-        }
-    };
-
-    const changeTaskTitle = (toDoListId: string, taskId: string, title: string) => {
-        setTasks({
-            ...tasks,
-            [toDoListId]: tasks[toDoListId].map(task => task.id === taskId ? {...task, title} : task)
-        })
-    }
-
-    const changeTaskCompletion = (toDoListId: string, taskId: string, isDone: boolean) => {
-        setTasks({
-            ...tasks,
-            [toDoListId]: tasks[toDoListId].map(task => task.id === taskId ? {...task, isDone} : task),
-        })
-    };
-
-    const createError = (toDoListId: string, error: string) => {
-        setToDoLists(toDoLists.map(tdl => toDoListId === tdl.id ? {...tdl, error} : tdl));
-    };
-
-    const deleteToDoList = (toDoListId: string) => {
-        setToDoLists(toDoLists.filter(tdl => tdl.id !== toDoListId));
-        delete tasks[toDoListId];
-    }
-
-    const mappedToDoLists = toDoLists.map(tdl => {
+    const mappedToDoLists = toDoListReducerState.map(tdl => {
         return (
             <ToDoList key={tdl.id}
-                      id={tdl.id}
+                      toDoListId={tdl.id}
                       title={tdl.title}
+                      tasks={taskReducerState[tdl.id]}
                       filterMethod={tdl.filterMethod}
-                      tasks={tasks[tdl.id]}
-                      changeToDoListTitle={changeToDoListTitle}
-                      changeFilterMethod={changeFilterMethod}
-                      deleteToDoList={deleteToDoList}
-                      addTask={addTask}
-                      deleteTask={deleteTask}
-                      filterTasks={filterTasks}
-                      changeTaskTitle={changeTaskTitle}
-                      changeTaskCompletion={changeTaskCompletion}
+                      toDoListReducerDispatch={toDoListReducerDispatch}
+                      taskReducerDispatch={taskReducerDispatch}
                       date={'30.01.2024'}
             />
         )
@@ -121,7 +39,7 @@ function App() {
             <h1 className='creation-header'>Create To-Do list:</h1>
             <AddItemForm addItem={addToDoList}/>
             <div className="toDoLists-container">
-            {mappedToDoLists.length ? mappedToDoLists : <span>There are no to-do lists yet.</span>}
+                {mappedToDoLists.length ? mappedToDoLists : <span>There are no to-do lists yet.</span>}
             </div>
         </div>
     )
