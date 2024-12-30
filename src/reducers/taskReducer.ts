@@ -1,13 +1,8 @@
 import {v1} from "uuid";
-import {
-    ToDoListReducerActionTypes,
-    AddToDoListAT,
-    DeleteToDoListAT,
-    toDoList1Id,
-    toDoList2Id
-} from "./toDoListReducer";
 
 enum TaskReducerActionTypes {
+    CREATE_TASK_ARRAY = 'CREATE-TASK-ARRAY',
+    DELETE_TASK_ARRAY = 'DELETE-TASK-ARRAY',
     ADD_TASK = 'ADD-TASK',
     DELETE_TASK = 'DELETE-TASK',
     CHANGE_TASK_TITLE = 'CHANGE-TASK-TITLE',
@@ -20,77 +15,74 @@ type Task = {
     isDone: boolean
 }
 
-export type TaskArray = Task[];
+export type TaskArray = Task[]
 
-type State = {
+export type TaskState = {
     [key: string]: TaskArray
 }
 
-export const taskReducerInitialState: State = {
-    [toDoList1Id]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'ReactJS', isDone: false},
-        {id: v1(), title: 'Redux', isDone: false},
-        {id: v1(), title: 'Typescript', isDone: false},
-        {id: v1(), title: 'RTK query', isDone: false},
-    ],
-    [toDoList2Id]: []
-};
-
 type Action =
-    | AddToDoListAT
-    | DeleteToDoListAT
-    | { type: TaskReducerActionTypes.ADD_TASK, toDoListId: string, title: string }
-    | { type: TaskReducerActionTypes.DELETE_TASK, toDoListId: string, taskId: string }
-    | { type: TaskReducerActionTypes.CHANGE_TASK_TITLE, toDoListId: string, taskId: string, title: string }
-    | { type: TaskReducerActionTypes.CHANGE_TASK_COMPLETION, toDoListId: string, taskId: string, isDone: boolean }
+    | { type: TaskReducerActionTypes.CREATE_TASK_ARRAY, payload: { toDoListId: string } }
+    | { type: TaskReducerActionTypes.DELETE_TASK_ARRAY, payload: { toDoListId: string } }
+    | { type: TaskReducerActionTypes.ADD_TASK, payload: { toDoListId: string, title: string } }
+    | { type: TaskReducerActionTypes.DELETE_TASK, payload: { toDoListId: string, taskId: string } }
+    | { type: TaskReducerActionTypes.CHANGE_TASK_TITLE, payload: { toDoListId: string, taskId: string, title: string } }
+    | {
+    type: TaskReducerActionTypes.CHANGE_TASK_COMPLETION,
+    payload: { toDoListId: string, taskId: string, isDone: boolean }
+}
 
-export const taskReducer = (state: State = taskReducerInitialState, action: Action) => {
+export const taskReducer = (state: TaskState = {}, action: Action) => {
     switch (action.type) {
-        case ToDoListReducerActionTypes.ADD_TO_DO_LIST:
-            return {...state, [action.toDoListId]: []};
-        case ToDoListReducerActionTypes.DELETE_TO_DO_LIST:
-            delete state[action.toDoListId];
-            return state;
+        case TaskReducerActionTypes.CREATE_TASK_ARRAY:
+            return {...state, [action.payload.toDoListId]: []}
+        case TaskReducerActionTypes.DELETE_TASK_ARRAY:
+            delete state[action.payload.toDoListId]
+            return state
         case TaskReducerActionTypes.ADD_TASK:
-            const newTask = {id: v1(), title: action.title, isDone: false};
-            return {...state, [action.toDoListId]: [newTask, ...state[action.toDoListId]]};
+            const newTask = {id: v1(), title: action.payload.title, isDone: false}
+            return {...state, [action.payload.toDoListId]: [newTask, ...state[action.payload.toDoListId]]}
         case TaskReducerActionTypes.DELETE_TASK:
             return {
                 ...state,
-                [action.toDoListId]: state[action.toDoListId].filter(task => task.id !== action.taskId)
-            };
+                [action.payload.toDoListId]: state[action.payload.toDoListId].filter(task => task.id !== action.payload.taskId)
+            }
         case TaskReducerActionTypes.CHANGE_TASK_TITLE:
             return {
                 ...state,
-                [action.toDoListId]: state[action.toDoListId].map(task => task.id === action.taskId ? {
+                [action.payload.toDoListId]: state[action.payload.toDoListId].map(task => task.id === action.payload.taskId ? {
                     ...task,
-                    title: action.title
+                    title: action.payload.title
                 } : task)
-            };
+            }
         case TaskReducerActionTypes.CHANGE_TASK_COMPLETION:
             return {
                 ...state,
-                [action.toDoListId]: state[action.toDoListId].map(task => task.id === action.taskId ? {
+                [action.payload.toDoListId]: state[action.payload.toDoListId].map(task => task.id === action.payload.taskId ? {
                     ...task,
-                    isDone: action.isDone
+                    isDone: action.payload.isDone
                 } : task),
-            };
+            }
         default:
-            return state;
+            return state
     }
 };
 
+export const createTaskArrayAC = (toDoListId: string): Action => {
+    return {type: TaskReducerActionTypes.CREATE_TASK_ARRAY, payload: {toDoListId}}
+}
+export const deleteTaskArrayAC = (toDoListId: string): Action => {
+    return {type: TaskReducerActionTypes.DELETE_TASK_ARRAY, payload: {toDoListId}}
+}
 export const addTaskAC = (toDoListId: string, title: string): Action => {
-    return {type: TaskReducerActionTypes.ADD_TASK, toDoListId, title};
-};
+    return {type: TaskReducerActionTypes.ADD_TASK, payload: {toDoListId, title}}
+}
 export const deleteTaskAC = (toDoListId: string, taskId: string): Action => {
-    return {type: TaskReducerActionTypes.DELETE_TASK, toDoListId, taskId};
-};
+    return {type: TaskReducerActionTypes.DELETE_TASK, payload: {toDoListId, taskId}}
+}
 export const changeTaskTitleAC = (toDoListId: string, taskId: string, title: string): Action => {
-    return {type: TaskReducerActionTypes.CHANGE_TASK_TITLE, toDoListId, taskId, title};
-};
+    return {type: TaskReducerActionTypes.CHANGE_TASK_TITLE, payload: {toDoListId, taskId, title}}
+}
 export const changeTaskCompletionAC = (toDoListId: string, taskId: string, isDone: boolean): Action => {
-    return {type: TaskReducerActionTypes.CHANGE_TASK_COMPLETION, toDoListId, taskId, isDone};
-};
+    return {type: TaskReducerActionTypes.CHANGE_TASK_COMPLETION, payload: {toDoListId, taskId, isDone}}
+}

@@ -1,23 +1,36 @@
 import React, {useReducer} from 'react';
 import './App.css';
+import {v1} from "uuid";
 import {ToDoList} from "./components/ToDoList";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
-import {
-    addToDoListAC,
-    toDoListReducerInitialState,
-    toDoListReducer,
-} from "./reducers/toDoListReducer";
-import {v1} from "uuid";
-import {taskReducer, taskReducerInitialState} from "./reducers/taskReducer";
+import {addToDoListAC, toDoListReducer, toDoList1Id, toDoList2Id, ToDoListState} from "./reducers/toDoListReducer";
+import {createTaskArrayAC, taskReducer, TaskState} from "./reducers/taskReducer";
 
 function App() {
-    const [toDoListReducerState, toDoListReducerDispatch] = useReducer(toDoListReducer, toDoListReducerInitialState);
-    const [taskReducerState, taskReducerDispatch] = useReducer(taskReducer, taskReducerInitialState);
+    const toDoListReducerInitialState: ToDoListState = [
+        {id: toDoList1Id, title: 'What to learn', filterMethod: 'all'},
+        {id: toDoList2Id, title: 'What to buy', filterMethod: 'all'},
+    ];
+
+    const taskReducerInitialState: TaskState = {
+        [toDoList1Id]: [
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'Redux', isDone: false},
+            {id: v1(), title: 'Typescript', isDone: false},
+            {id: v1(), title: 'RTK query', isDone: false},
+        ],
+        [toDoList2Id]: []
+    };
+
+    const [toDoListReducerState, dispatchToToDoListReducer] = useReducer(toDoListReducer, toDoListReducerInitialState);
+    const [taskReducerState, dispatchToTaskReducer] = useReducer(taskReducer, taskReducerInitialState);
 
     const addToDoList = (title: string) => {
-        const action = addToDoListAC(v1(), title);
-        toDoListReducerDispatch(action);
-        taskReducerDispatch(action);
+        const newToDoListId = v1();
+        dispatchToToDoListReducer(addToDoListAC(newToDoListId, title));
+        dispatchToTaskReducer(createTaskArrayAC(newToDoListId));
     };
 
     const mappedToDoLists = toDoListReducerState.map(tdl => {
@@ -27,8 +40,8 @@ function App() {
                       title={tdl.title}
                       tasks={taskReducerState[tdl.id]}
                       filterMethod={tdl.filterMethod}
-                      toDoListReducerDispatch={toDoListReducerDispatch}
-                      taskReducerDispatch={taskReducerDispatch}
+                      dispatchToToDoListReducer={dispatchToToDoListReducer}
+                      dispatchToTaskReducer={dispatchToTaskReducer}
                       date={'30.01.2024'}
             />
         )

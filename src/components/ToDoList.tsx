@@ -10,7 +10,7 @@ import {
     deleteToDoListAC,
     filterMethodType
 } from "../reducers/toDoListReducer";
-import {addTaskAC, TaskArray} from "../reducers/taskReducer";
+import {addTaskAC, deleteTaskArrayAC, TaskArray} from "../reducers/taskReducer";
 
 type Props = {
     toDoListId: string
@@ -18,8 +18,8 @@ type Props = {
     tasks: TaskArray
     filterMethod: filterMethodType
     date?: string
-    toDoListReducerDispatch: any
-    taskReducerDispatch: any
+    dispatchToToDoListReducer: any
+    dispatchToTaskReducer: any
 }
 
 export const ToDoList = ({
@@ -28,47 +28,47 @@ export const ToDoList = ({
                              tasks,
                              filterMethod,
                              date,
-                             toDoListReducerDispatch,
-                             taskReducerDispatch
+                             dispatchToToDoListReducer,
+                             dispatchToTaskReducer
                          }: Props) => {
 
 
     const filterTasks = (tasks: TaskArray, filterMethod: filterMethodType) => {
         switch (filterMethod) {
             case 'active':
-                return tasks.filter(task => !task.isDone);
+                return tasks.filter(task => !task.isDone)
             case 'completed':
-                return tasks.filter(task => task.isDone);
+                return tasks.filter(task => task.isDone)
             default:
-                return tasks;
+                return tasks
         }
     };
 
     const deleteToDoList = (toDoListId: string) => {
-        toDoListReducerDispatch(deleteToDoListAC(toDoListId));
-        taskReducerDispatch(deleteToDoListAC(toDoListId));
+        dispatchToToDoListReducer(deleteToDoListAC(toDoListId))
+        dispatchToTaskReducer(deleteTaskArrayAC(toDoListId))
     };
 
     const changeToDoListTitle = (toDoListId: string, title: string) => {
-        toDoListReducerDispatch(changeToDoListTitleAC(toDoListId, title));
+        dispatchToToDoListReducer(changeToDoListTitleAC(toDoListId, title))
     };
 
     const changeFilterMethod = (toDoListId: string, filterMethod: filterMethodType) => {
-        toDoListReducerDispatch(changeToDoListFilterMethodAC(toDoListId, filterMethod));
+        dispatchToToDoListReducer(changeToDoListFilterMethodAC(toDoListId, filterMethod))
     };
 
-    const addTask = (toDoListId: string, title: string) => taskReducerDispatch(addTaskAC(toDoListId, title));
+    const addTask = (toDoListId: string, title: string) => dispatchToTaskReducer(addTaskAC(toDoListId, title))
 
     const mappedTasks = filterTasks(tasks, filterMethod).map(task => {
         return (
             <Task toDoListId={toDoListId} taskId={task.id} title={task.title} isDone={task.isDone}
-                  taskReducerDispatch={taskReducerDispatch}/>
-        );
-    });
+                  taskReducerDispatch={dispatchToTaskReducer}/>
+        )
+    })
 
-    const showAllTasks = () => changeFilterMethod(toDoListId, 'all');
-    const showActiveTasks = () => changeFilterMethod(toDoListId, 'active');
-    const showCompletedTasks = () => changeFilterMethod(toDoListId, 'completed');
+    const showAllTasks = () => changeFilterMethod(toDoListId, 'all')
+    const showActiveTasks = () => changeFilterMethod(toDoListId, 'active')
+    const showCompletedTasks = () => changeFilterMethod(toDoListId, 'completed')
 
     const allFilterButtonClassName = filterMethod === 'all'
         ? styles.filterButton + ' ' + styles.activeFilterButton
@@ -78,11 +78,11 @@ export const ToDoList = ({
         : styles.filterButton;
     const completedFilterButtonClassName = filterMethod === 'completed'
         ? styles.filterButton + ' ' + styles.activeFilterButton
-        : styles.filterButton;
+        : styles.filterButton
 
-    const changeToDoListTitleCallback = (title: string) => changeToDoListTitle(toDoListId, title);
-    const deleteToDoListCallback = () => deleteToDoList(toDoListId);
-    const addTaskCallback = (newTaskTitle: string) => addTask(toDoListId, newTaskTitle);
+    const changeToDoListTitleCallback = (title: string) => changeToDoListTitle(toDoListId, title)
+    const deleteToDoListCallback = () => deleteToDoList(toDoListId)
+    const addTaskCallback = (newTaskTitle: string) => addTask(toDoListId, newTaskTitle)
 
     return (
         <div>
@@ -104,5 +104,5 @@ export const ToDoList = ({
             </div>
             <div>{date}</div>
         </div>
-    );
-};
+    )
+}
